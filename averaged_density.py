@@ -2,13 +2,17 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 
+import noise
 
-n = 100
+
+n = 500
+k = 0.9 # 0: whitenoise
 
 rngs = [np.random.default_rng(seed=mu) for mu in range(50)]
 timeline = np.linspace(1/n, 1, n)
 
-sigmas = np.array([rng.random(n) for rng in rngs])
+sigmas = np.array([noise.noise(n, k, rng) for rng in rngs])
+# sigmas = np.array([rng.random(n) for rng in rngs])
 sigmas_averaged = np.cumsum(sigmas, axis=1)/timeline
 
 
@@ -29,7 +33,8 @@ for i in range(len(sigmas_averaged)):
 	plt.plot(timeline, sigmas_averaged[i], color=c, linewidth=w, zorder=order)
 
 
-shown = {'sigma', 'sigma_averaged'}
+# shown = {'sigma', 'sigma_averaged'}
+shown = {}
 for f in [v for k, v in figs.items() if k not in shown]:
 	plt.close(f)
 plt.show()
