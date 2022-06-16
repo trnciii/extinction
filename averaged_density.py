@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import os
 
 
 n = 100
@@ -14,8 +15,8 @@ sigmas_averaged = np.cumsum(sigmas, axis=1)/timeline
 figs = {}
 
 # color, order, line width
-line_top = ('salmon', 1, 1.5)
-line_cloud = ('#77777777', 0, 1)
+line_top = 'salmon', 1, 1.5
+line_cloud = '#77777777', 0, 1
 
 figs['sigma'] = plt.figure()
 for i in range(len(sigmas)):
@@ -33,5 +34,10 @@ for f in [v for k, v in figs.items() if k not in shown]:
 	plt.close(f)
 plt.show()
 
+
+out = './result/'
+if (parent := os.path.dirname(out)) != '':
+	os.makedirs(parent, exist_ok=True)
+
 for k, v in figs.items():
-	v.savefig('./result/{}.png'.format(k), dpi=150)
+	v.savefig(out+'{}.png'.format(k), dpi=150)
