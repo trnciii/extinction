@@ -9,10 +9,13 @@ def noise(n, k, rng):
 		ret[i+1] = k*ret[i] + rng.random()*np.sqrt(1-k*k)
 	return ret
 
-def noise_lim_mean(k):
+def lim_mean(k):
 	return np.sqrt(1-k*k) / (2*(1-k))
 
-def noise_mean(x0, n, k):
+def lim_std(k):
+	return np.sqrt((1-k*k)/12)/(1-k)
+
+def mean(x0, n, k):
 	term1 = (x0 * (1-k**n)) / (n*(1-k))
 	term2 = noise_lim_mean(k)
 	term3 = (np.sqrt(1-k*k) * (1-k**n)) / (2*n*(1-k)*(1-k))
