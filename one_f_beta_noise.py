@@ -29,7 +29,7 @@ def one_f_beta(n, beta, rngs=[np.random.default_rng(seed=0)]):
 if __name__ == '__main__':
 	n = 1000
 	beta = 1
-	seqs = 200
+	seqs = 100
 
 	rngs = [np.random.default_rng(seed=i) for i in range(seqs)]
 	noises = one_f_beta(n, beta, rngs)
@@ -39,18 +39,21 @@ if __name__ == '__main__':
 
 	figs['noises'], ax = plt.subplots(1, 2)
 
-	figurateur.cloud(ax[0], noises)
+	figurateur.cloud(ax[0], np.linspace(1, n, n), noises)
 	ax[0].set_position((0.1, 0.05, 0.7, 0.95))
 
-	ax[1].hist(noises.reshape((-1)), bins=20, orientation='horizontal')
+	ax[1].hist(np.reshape(noises, (-1)), bins=20, orientation='horizontal')
 	ax[1].set_position((0.8, 0.05, 0.2, 0.95))
 	ax[1].get_xaxis().set_visible(False)
 	ax[1].get_yaxis().set_visible(False)
 
 
 	figs['powers'], ax = plt.subplots(1, 1)
-	figurateur.power_spectrum(ax, noises)
+	x, y = figurateur.power_spectra(noises)
+	figurateur.cloud(ax, x, y)
+	ax.set_yscale('log')
+	ax.set_xscale('log')
 
 
 	figurateur.save(figs)
-	figurateur.show(figs, exclude={'noises'})
+	figurateur.show(figs, exclude={})

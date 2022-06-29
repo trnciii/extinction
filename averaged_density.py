@@ -20,10 +20,10 @@ sigmas_averaged = np.cumsum(sigmas, axis=1)/timeline
 figs = {}
 
 figs['sigma'], ax = plt.subplots(1, 1)
-figurateur.cloud(ax, sigmas)
+figurateur.cloud(ax, timeline, sigmas)
 
 figs['sigma_averaged'], ax = plt.subplots(1,1)
-figurateur.cloud(ax, sigmas_averaged)
+figurateur.cloud(ax, timeline, sigmas_averaged)
 
 
 figurateur.save(figs)
