@@ -17,7 +17,7 @@ def one_f_beta(n, beta, rngs=[np.random.default_rng(seed=0)]):
 
 	phase = np.array([2*np.pi*rng.random((kmax)) for rng in rngs])
 	Cpos = C*np.exp(1j*phase)
-	Cneg = np.flip(np.conj(Cpos))
+	Cneg = np.flip(np.conj(Cpos), axis=1)
 
 	C = np.concatenate((np.zeros((seqs, 1)), Cpos, Cneg), axis=1)
 	noise = np.fft.ifft(C)
@@ -53,4 +53,4 @@ if __name__ == '__main__':
 
 
 	figurateur.save(figs)
-	figurateur.show(figs)
+	figurateur.show(figs, exclude={'noises'})
