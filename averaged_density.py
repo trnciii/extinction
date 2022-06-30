@@ -2,29 +2,31 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 
-import noise
+import autoregressive, oneoverf
 import figurateur
 
+noise = autoregressive
+noise = oneoverf
 
 n = 500
-k = 0.9 # 0: whitenoise
+k_or_beta = 0
 
 rngs = [np.random.default_rng(seed=mu) for mu in range(50)]
-timeline = np.linspace(1/n, 1, n)
+timeline = np.linspace(1, n, n)
 
-sigmas = np.array([noise.noise(n, k, rng) for rng in rngs])
-# sigmas = np.array([rng.random(n) for rng in rngs])
+sigmas = np.array([noise.sequence(n, k_or_beta, rng) for rng in rngs])
 sigmas_averaged = np.cumsum(sigmas, axis=1)/timeline
 
 
 figs = {}
 
-figs['sigma'], ax = plt.subplots(1, 1)
-figurateur.cloud(ax, timeline, sigmas)
+figs.update(figurateur.inspect_noise(sigmas))
 
 figs['sigma_averaged'], ax = plt.subplots(1,1)
 figurateur.cloud(ax, timeline, sigmas_averaged)
+ax.set_xscale('log')
 
 
-figurateur.save(figs)
-figurateur.show(figs)
+pre = 'ar_' if noise is autoregressive else '1_f_'
+figurateur.save(figs, prefix=pre)
+figurateur.show(figs, exclude={'powers'})
