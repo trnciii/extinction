@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import os
+import warnings
 
 def cloud(ax, x, signals,
 	line_top = ('salmon', 1, 2),
@@ -33,6 +34,12 @@ def save(figs, out_dir='./result/', prefix='', suffix=''):
 
 
 def show(figs, exclude={}):
+	exclude = set(exclude)
+	diff = exclude.difference(figs.keys())
+	if len(diff):
+		message = 'fig key(s) {} not found in {}.'.format(diff, set(figs.keys()))
+		warnings.warn(message, stacklevel=2)
+
 	for f in [v for k, v in figs.items() if k in exclude]:
 		plt.close(f)
 
