@@ -1,12 +1,15 @@
 import numpy as np
 
 def sequence(n, k, rng):
+	if k>=1: k = 0.99
+	if k<=-1: k = -0.99
+
 	mean = lim_mean(k)
 
 	ret = np.empty(n)
 	ret[0] = rng.uniform() * 2*mean
 	for i in range(n-1):
-		ret[i+1] = k*ret[i] + rng.random()*np.sqrt(1-k*k)
+		ret[i+1] = k*ret[i] + rng.uniform()*np.sqrt(1-k*k)
 	return ret
 
 def lim_mean(k):
@@ -25,11 +28,10 @@ def mean(x0, n, k):
 
 if __name__ == '__main__':
 
-	from matplotlib import pyplot as plt
 	import figurateur
 
 	n = 1000
-	k = 0
+	k = 1
 	seqs = 100
 
 	rngs = [np.random.default_rng(seed=i) for i in range(seqs)]
@@ -38,4 +40,4 @@ if __name__ == '__main__':
 	figs = figurateur.inspect_noise(noises)
 
 	figurateur.save(figs, prefix='ar_')
-	figurateur.show(figs, exclude={})
+	figurateur.show(figs)

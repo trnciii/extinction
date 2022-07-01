@@ -19,7 +19,6 @@ def sequence(n, beta, rng):
 
 if __name__ == '__main__':
 
-	from matplotlib import pyplot as plt
 	import figurateur
 
 	n = 1000
