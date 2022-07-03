@@ -40,8 +40,11 @@ def show(figs, exclude={}):
 		message = 'fig key(s) {} not found in {}.'.format(diff, set(figs.keys()))
 		warnings.warn(message, stacklevel=2)
 
-	for f in [v for k, v in figs.items() if k in exclude]:
-		plt.close(f)
+	for k, v  in figs.items():
+		if k in exclude:
+			plt.close(v)
+		else:
+			v.canvas.set_window_title(k)
 
 	plt.show()
 
