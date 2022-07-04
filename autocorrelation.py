@@ -9,12 +9,9 @@ import figurateur
 
 
 def acf(x, window=None):
-	N = len(x)
-	if window == None: window = N//2
-
-	ret = np.array([np.dot(x[:window], x[j:j+window]) for j in range(N-window)])
-
-	return ret/ret[0]
+	if window == None: window = len(x)//2
+	npcorr = np.correlate(noise, noise[:window], mode='valid')
+	return npcorr/npcorr[0]
 
 
 figs = {}
