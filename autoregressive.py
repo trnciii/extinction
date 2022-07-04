@@ -1,5 +1,7 @@
 import numpy as np
 
+name = 'AR'
+
 def sequence(n, k, rng):
 	if k>1: k = 1
 	if k<-1: k = -1

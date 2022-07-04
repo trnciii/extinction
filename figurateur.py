@@ -29,6 +29,7 @@ def save(figs, out_dir='./result/', prefix='', suffix=''):
 		os.makedirs(parent, exist_ok=True)
 
 	for k, v in figs.items():
+		k = k.replace('/','')
 		filename = out_dir + prefix + k + suffix + '.png'
 		v.savefig(filename, dpi=150)
 

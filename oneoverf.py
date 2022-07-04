@@ -1,5 +1,7 @@
 import numpy as np
 
+name = '1/f'
+
 def sequence(n, beta, rng):
 	kmax = n//2
 
