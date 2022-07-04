@@ -10,7 +10,7 @@ import figurateur
 
 def acf(x, window=None):
 	if window == None: window = len(x)//2
-	npcorr = np.correlate(noise, noise[:window], mode='valid')
+	npcorr = np.correlate(x, x[:window], mode='valid')
 	return npcorr/npcorr[0]
 
 
