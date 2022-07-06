@@ -47,6 +47,7 @@ def show(figs, exclude={}):
 		else:
 			v.canvas.set_window_title(k)
 
+	print("", end='', flush=True)
 	plt.show()
 
 
