@@ -33,4 +33,4 @@ if __name__ == '__main__':
 	figs = figurateur.inspect_noise(noises)
 
 	figurateur.save(figs, prefix='1_f_')
-	figurateur.show(figs, exclude={})
+	figurateur.show(figs, exclude={'noises'})

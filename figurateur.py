@@ -19,9 +19,18 @@ def power_spectra(signals):
 	n = signals.shape[1]
 
 	freq = np.fft.fftfreq(n)
-	power = np.abs(np.fft.fft(signals))**2
+	power = np.abs(np.fft.fft(signals))
 
 	return freq[1:n//2], power[:, 1:n//2]
+
+
+def psd_line(freq, power):
+	x = np.log(freq)
+	y = np.log(power)
+
+	A = np.vstack([x, np.ones(len(x))]).T
+
+	return np.linalg.lstsq(A, y, rcond=None)[0]
 
 
 def save(figs, out_dir='./result/', prefix='', suffix=''):
@@ -75,10 +84,18 @@ def inspect_noise(noises):
 
 	ax.set_title('psd (scipy)')
 	x, y = signal.welch(noises)
+	x, y = x[1:], np.sqrt(y[:, 1:])
 
 	cloud(ax, x, y)
 	ax.set_yscale('log')
 	ax.set_xscale('log')
 
+
+	m, c = psd_line(x, np.mean(y, axis=0))
+	print(m, c)
+
+	slopelabel = 'slope = {:.4}'.format(m)
+	ax.plot(x, np.exp(m*np.log(x) + c), label=slopelabel, color='lightblue')
+	ax.legend()
 
 	return figs
