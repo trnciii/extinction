@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import signal
 from matplotlib import pyplot as plt
 import os
 import warnings
@@ -67,10 +68,17 @@ def inspect_noise(noises):
 	ax[1].get_yaxis().set_visible(False)
 
 
-	figs['powers'], ax = plt.subplots(1, 1)
-	x, y = power_spectra(noises)
+	figs['powers'] , ax = plt.subplots(1, 1, tight_layout=True)
+
+	# ax.set_title('psd (numpy)')
+	# x, y = power_spectra(noises)
+
+	ax.set_title('psd (scipy)')
+	x, y = signal.welch(noises)
+
 	cloud(ax, x, y)
 	ax.set_yscale('log')
 	ax.set_xscale('log')
+
 
 	return figs
