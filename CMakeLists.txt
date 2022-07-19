@@ -36,6 +36,7 @@ nanobind_add_module(
   core
   NB_STATIC # Build static libnanobind (the extension module itself remains a shared library)
   visibility/interface.cpp
+  visibility/kernel.cpp
 )
 
 # Install directive for scikit-build

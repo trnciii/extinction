@@ -1,1 +1,1 @@
-from .core import add
+from .core import add, call_kernel

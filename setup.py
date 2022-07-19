@@ -12,10 +12,6 @@ except ImportError:
 
 setup(
     name="visibility",
-    version="0.0.1",
-    author="trnciii",
-    url="https://github.com/trnciii/extinction",
-    license="BSD",
     packages=['visibility'],
     package_dir={'': 'visibility'},
     cmake_install_dir="visibility/visibility",
