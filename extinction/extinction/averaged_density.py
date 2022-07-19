@@ -3,7 +3,7 @@ if __name__ == '__main__':
 	from matplotlib import pyplot as plt
 	import os
 
-	import autoregressive, oneoverf
+	from noise import autoregressive, oneoverf
 	import figurateur
 
 	noise = autoregressive

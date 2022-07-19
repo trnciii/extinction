@@ -19,9 +19,8 @@ def sequence(n, beta, rng):
 
 
 
-if __name__ == '__main__':
-
-	import figurateur
+def main():
+	from extinction import figurateur
 
 	n = 1000
 	beta = 1
@@ -34,3 +33,7 @@ if __name__ == '__main__':
 
 	figurateur.save(figs, prefix='1_f_')
 	figurateur.show(figs, exclude={'noises'})
+
+
+if __name__ == '__main__':
+	main()

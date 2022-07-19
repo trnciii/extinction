@@ -11,10 +11,15 @@ except ImportError:
     raise
 
 setup(
-    name="visibility",
-    packages=['visibility'],
-    package_dir={'': 'visibility'},
-    cmake_install_dir="visibility/visibility",
+    name="extinction",
+    packages=['extinction'],
+    package_dir={'': 'extinction'},
+    cmake_install_dir="extinction/extinction",
     include_package_data=True,
-    python_requires=">=3.8"
+    python_requires=">=3.8",
+    install_requires=[
+        'numpy',
+        'matplotlib',
+        'scipy',
+    ],
 )

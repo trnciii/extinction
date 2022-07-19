@@ -13,9 +13,8 @@ def sequence(n, k, rng):
 	return ret
 
 
-if __name__ == '__main__':
-
-	import figurateur
+def main():
+	from extinction import figurateur
 
 	n = 1000
 	k = 1
@@ -28,3 +27,6 @@ if __name__ == '__main__':
 
 	figurateur.save(figs, prefix='ar_')
 	figurateur.show(figs)
+
+if __name__ == '__main__':
+	main()

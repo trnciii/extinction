@@ -7,12 +7,12 @@ def acf(x, window=None):
 	return npcorr/npcorr[0]
 
 
-if __name__ == '__main__':
+def main():
 	from matplotlib import pyplot as plt
 	import sys
 
-	import autoregressive
-	import oneoverf
+	from noise import autoregressive
+	from noise import oneoverf
 
 	import figurateur
 
@@ -42,3 +42,6 @@ if __name__ == '__main__':
 	if not '-b' in sys.argv:
 		figurateur.show(figs)
 
+
+if __name__ == '__main__':
+	main()

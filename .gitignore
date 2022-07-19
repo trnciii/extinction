@@ -1,4 +1,6 @@
 *result*/
 *__pycache__/
-visibility.egg-info
+*.egg-info
 _skbuild
+*.so
+*.pyd
