@@ -61,20 +61,28 @@ def show(figs, exclude={}):
 	plt.show()
 
 
-def inspect_noise(noises):
+def cloud_and_hist(noises):
 	n = noises.shape[1]
 
-	figs = {}
-
-	figs['noises'], ax = plt.subplots(1, 2)
+	fig, ax = plt.subplots(1, 2)
 
 	cloud(ax[0], np.linspace(1, n, n), noises)
-	ax[0].set_position((0.1, 0.05, 0.7, 0.95))
+	ax[0].set_position((0.05, 0.05, 0.7, 0.95))
 
 	ax[1].hist(np.reshape(noises, (-1)), bins=20, orientation='horizontal')
 	ax[1].set_position((0.8, 0.05, 0.2, 0.95))
 	ax[1].get_xaxis().set_visible(False)
 	ax[1].get_yaxis().set_visible(False)
+
+	return fig
+
+
+def inspect_noise(noises):
+	n = noises.shape[1]
+
+	figs = {}
+
+	figs['noises'] = cloud_and_hist(noises)
 
 
 	figs['powers'] , ax = plt.subplots(1, 1, tight_layout=True)
