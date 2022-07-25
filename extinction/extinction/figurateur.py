@@ -34,13 +34,10 @@ def psd_line(freq, power):
 
 
 def save(figs, out_dir='./result/', prefix='', suffix=''):
-
-	if (parent := os.path.dirname(out_dir)) != '':
-		os.makedirs(parent, exist_ok=True)
-
+	os.makedirs(out_dir, exist_ok=True)
 	for k, v in figs.items():
 		k = k.replace('/','')
-		filename = out_dir + prefix + k + suffix + '.png'
+		filename = os.path.join(out_dir, prefix + k + suffix + '.png')
 		v.savefig(filename, dpi=150)
 
 
@@ -61,10 +58,10 @@ def show(figs, exclude={}):
 	plt.show()
 
 
-def cloud_and_hist(noises):
+def cloud_and_hist(fig, noises):
 	n = noises.shape[1]
 
-	fig, ax = plt.subplots(1, 2)
+	ax = fig.subplots(1, 2)
 
 	cloud(ax[0], np.linspace(1, n, n), noises)
 	ax[0].set_position((0.05, 0.05, 0.7, 0.95))
@@ -74,15 +71,14 @@ def cloud_and_hist(noises):
 	ax[1].get_xaxis().set_visible(False)
 	ax[1].get_yaxis().set_visible(False)
 
-	return fig
-
 
 def inspect_noise(noises):
 	n = noises.shape[1]
 
 	figs = {}
 
-	figs['noises'] = cloud_and_hist(noises)
+	figs['noises'] = plt.figure()
+	cloud_and_hist(figs['noises'], noises)
 
 
 	figs['powers'] , ax = plt.subplots(1, 1, tight_layout=True)
