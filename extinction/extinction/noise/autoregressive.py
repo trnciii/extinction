@@ -10,7 +10,7 @@ def sequence(n, k, rng):
 	ret[0] = rng.normal()
 	for i in range(n-1):
 		ret[i+1] = k*ret[i] + rng.normal()
-	return ret
+	return ret/np.std(ret)
 
 
 def main():

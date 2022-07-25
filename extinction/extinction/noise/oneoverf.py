@@ -15,6 +15,9 @@ def sequence(n, beta, rng):
 	C = np.concatenate(([0], Cpos, Cneg))
 	noise = np.fft.ifft(C)
 
+	re = noise.real[:n]
+	return re/np.std(re)
+
 	return noise.real[:n]
 
 
