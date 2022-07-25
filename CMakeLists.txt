@@ -40,11 +40,11 @@ find_package(nanobind CONFIG REQUIRED)
 
 # Build the actual extension module
 nanobind_add_module(
-  bruteforce
+  core
   NB_STATIC # Build static libnanobind (the extension module itself remains a shared library)
   extinction/bruteforce/interface.cpp
   extinction/bruteforce/kernel.cpp
 )
 
 # Install directive for scikit-build
-install(TARGETS bruteforce LIBRARY DESTINATION .)
+install(TARGETS core LIBRARY DESTINATION .)

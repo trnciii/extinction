@@ -8,7 +8,7 @@ namespace nb = nanobind;
 
 using namespace nb::literals;
 
-NB_MODULE(bruteforce, m) {
+NB_MODULE(core, m) {
 	m.def("ggx_ndf", ggx::ndf);
 	m.def("ggx_smith_g1", ggx::smith_g1);
 

@@ -14,7 +14,7 @@ setup(
     name="extinction",
     packages=['extinction'],
     package_dir={'': 'extinction'},
-    cmake_install_dir="extinction/extinction",
+    cmake_install_dir="extinction/extinction/bruteforce",
     include_package_data=True,
     python_requires=">=3.8",
     install_requires=[
