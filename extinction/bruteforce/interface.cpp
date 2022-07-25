@@ -9,6 +9,9 @@ namespace nb = nanobind;
 using namespace nb::literals;
 
 NB_MODULE(bruteforce, m) {
+	m.def("ggx_ndf", ggx::ndf);
+	m.def("ggx_smith_g1", ggx::smith_g1);
+
 	m.def("visibility",
 		[](nb::tensor<float, nb::shape<nb::any, nb::any>, nb::c_contig, nb::device::cpu> ar,
 			nb::tensor<float, nb::shape<nb::any>, nb::c_contig, nb::device::cpu> slope)

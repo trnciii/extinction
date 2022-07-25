@@ -2,4 +2,8 @@
 
 #include <cstddef>
 
-extern void kernel(float* x, std::size_t n);
+
+namespace ggx{
+	extern float ndf(float th_m, float alpha);
+	extern float smith_g1(float th_v, float alpha);
+}
