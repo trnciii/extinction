@@ -31,3 +31,4 @@ plt.plot(ref_arngle, g, label='mine a=0.1**0.5')
 
 plt.legend()
 plt.savefig('result/distribution.png', dpi=150)
+plt.show()
