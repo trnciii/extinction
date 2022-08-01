@@ -1,25 +1,22 @@
-import sys, re, os
+import sys
 
 try:
     from skbuild import setup
-    import nanobind
 except ImportError:
-    print("The preferred way to invoke 'setup.py' is via pip, as in 'pip "
-          "install .'. If you wish to run the setup script directly, you must "
-          "first install the build dependencies listed in pyproject.toml!",
-          file=sys.stderr)
+    print(
+        "Please update pip, you need pip 10 or greater,\n"
+        " or you need to install the PEP 518 requirements in pyproject.toml yourself",
+        file=sys.stderr,
+    )
     raise
+
+from setuptools import find_packages
 
 setup(
     name="extinction",
-    packages=['extinction'],
-    package_dir={'': 'extinction'},
-    cmake_install_dir="extinction/extinction/bruteforce",
+    version="0.0.1",
+    packages=find_packages(),
+    cmake_install_dir="extinction",
     include_package_data=True,
     python_requires=">=3.8",
-    install_requires=[
-        'numpy',
-        'matplotlib',
-        'scipy',
-    ],
 )
