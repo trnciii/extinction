@@ -2,14 +2,9 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
-#include "kernel.hpp"
-
 namespace py = pybind11;
 
-PYBIND11_MODULE(core, m) {
-	m.def("ggx_ndf", ggx::ndf);
-	m.def("ggx_smith_g1", ggx::smith_g1);
-
+PYBIND11_MODULE(test, m) {
 	m.def("visibility", [](const py::array_t<float>& _ar, const py::array_t<float>& _slope){
 		const auto ar = _ar.unchecked<2>();
 		const auto slope = _slope.unchecked<1>();

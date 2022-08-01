@@ -27,11 +27,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 # Now we can find pybind11
 find_package(pybind11 CONFIG REQUIRED)
 
-pybind11_add_module(core MODULE
-  bruteforce/interface.cpp
-  bruteforce/kernel.cpp
-)
+pybind11_add_module(test MODULE binding/test.cpp)
 
-target_compile_definitions(core PRIVATE VERSION_INFO=${PROJECT_VERSION})
+pybind11_add_module(ggx MODULE binding/ggx.cpp)
 
-install(TARGETS core DESTINATION ./bruteforce)
+
+install(TARGETS test DESTINATION .)
+install(TARGETS ggx DESTINATION .)
