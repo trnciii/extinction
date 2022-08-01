@@ -1,11 +1,12 @@
 [build-system]
 requires = [
     "setuptools>=42",
-    "wheel",
-    "scikit-build==0.14.0",
-    "cmake>=3.18",
-    "nanobind>=0.0.3",
-    "ninja; platform_system!='Windows'"
+    "pybind11~=2.9.2",
+    "cmake>=3.22",
+    "scikit-build>=0.15.0",
 ]
 
 build-backend = "setuptools.build_meta"
+
+[tool.isort]
+profile = "black"
