@@ -1,7 +1,7 @@
 import extinction, numpy as np
 from extinction.noise import oneoverf
 from extinction import figurateur
-from extinction.bruteforce import ggx_smith_g1
+from extinction.ggx import smith_g1
 import time
 from matplotlib import pyplot as plt
 
@@ -14,7 +14,7 @@ angle_steps = 100
 angle = np.linspace(1/angle_steps, np.pi/2, angle_steps)
 
 alpha = 0.4
-ref = ggx_smith_g1(angle, alpha)
+ref = smith_g1(angle, alpha)
 
 
 for beta in np.linspace(-2, 3, 6):
@@ -49,7 +49,7 @@ for beta in np.linspace(-2, 3, 6):
 	plt.plot(angle, tested(a), label=f'b={beta:.2f}, a={a:.2f}, diff={d:.2f}')
 
 
-plt.plot(angle, ggx_smith_g1(angle, alpha), label=f'smith (ref). a = {alpha:.2f}', linewidth=4)
+plt.plot(angle, smith_g1(angle, alpha), label=f'smith (ref). a = {alpha:.2f}', linewidth=4)
 plt.legend()
 
 plt.tight_layout()
