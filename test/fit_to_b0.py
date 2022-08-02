@@ -1,13 +1,12 @@
 import extinction, numpy as np
 from extinction.noise import oneoverf
 from extinction import figurateur
-from extinction.bruteforce import ggx_smith_g1
 import time
 from matplotlib import pyplot as plt
 
 
 n = 10000
-rngs = [np.random.default_rng(seed=mu) for mu in range(10000)]
+rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
 
 angle_steps = 100
 angle = np.linspace(1/angle_steps, np.pi/2, angle_steps)

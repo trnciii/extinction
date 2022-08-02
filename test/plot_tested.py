@@ -1,7 +1,7 @@
 import extinction, numpy as np
 from extinction.noise import oneoverf
 from extinction import figurateur
-from extinction.bruteforce import ggx_smith_g1
+from extinction import ggx
 
 from matplotlib import pyplot as plt
 import os
@@ -18,7 +18,7 @@ sigmas = np.array([oneoverf.sequence(n, k_or_beta, rng) for rng in rngs])
 
 steps = 1000
 angle = np.linspace(1/steps, np.pi/2, steps)
-smith = ggx_smith_g1(angle, 0.5)
+smith = ggx.smith_g1(angle, 0.5)
 
 slope = 1/np.tan(angle)
 tested = extinction.visibility(sigmas, slope)
