@@ -4,7 +4,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(test, m) {
+PYBIND11_MODULE(cpu, m) {
 	m.def("visibility", [](const py::array_t<float>& _ar, const py::array_t<float>& _slope){
 		const auto ar = _ar.unchecked<2>();
 		const auto slope = _slope.unchecked<1>();
