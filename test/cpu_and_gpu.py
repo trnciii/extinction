@@ -3,6 +3,11 @@ from mfgeo.noise import oneoverf
 from mfgeo import ggx
 import time
 
+if not mfgeo.gpu_found:
+	print('gpu not found')
+	exit()
+
+
 n = 1000
 k_or_beta = 0.0
 
