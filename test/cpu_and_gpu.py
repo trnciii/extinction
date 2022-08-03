@@ -1,6 +1,6 @@
-import extinction, numpy as np
-from extinction.noise import oneoverf
-from extinction import ggx
+import mfgeo, numpy as np
+from mfgeo.noise import oneoverf
+from mfgeo import ggx
 import time
 
 n = 1000
@@ -20,12 +20,12 @@ slope = 1/np.tan(angle)
 
 
 t0 = time.time()
-tested_cpu = extinction.test.cpu.visibility(sigmas, slope)
+tested_cpu = mfgeo.test.cpu.visibility(sigmas, slope)
 t1 = time.time()
 print('cpu:', t1-t0)
 
 t0 = time.time()
-tested_gpu = extinction.test.gpu.visibility(sigmas, slope)
+tested_gpu = mfgeo.test.gpu.visibility(sigmas, slope)
 t1 = time.time()
 print('gpu:', t1-t0)
 

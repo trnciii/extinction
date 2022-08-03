@@ -1,5 +1,5 @@
-from extinction import ggx
-from extinction import figurateur
+from mfgeo import ggx
+from mfgeo import figurateur
 import numpy as np
 from matplotlib import pyplot as plt
 

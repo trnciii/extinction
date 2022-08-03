@@ -1,6 +1,6 @@
-import extinction, numpy as np
+import mfgeo, numpy as np
 from matplotlib import pyplot as plt
-from extinction import ggx
+from mfgeo import ggx
 
 n = 1000
 

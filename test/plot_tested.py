@@ -1,7 +1,7 @@
-import extinction, numpy as np
-from extinction.noise import oneoverf
-from extinction import figurateur
-from extinction import ggx
+import mfgeo, numpy as np
+from mfgeo.noise import oneoverf
+from mfgeo import figurateur
+from mfgeo import ggx
 
 from matplotlib import pyplot as plt
 import os
@@ -21,7 +21,7 @@ angle = np.linspace(1/steps, np.pi/2, steps)
 smith = ggx.smith_g1(angle, 0.5)
 
 slope = 1/np.tan(angle)
-tested = extinction.visibility(sigmas, slope)
+tested = mfgeo.visibility(sigmas, slope)
 
 
 figs = {}
