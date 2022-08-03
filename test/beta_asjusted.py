@@ -1,7 +1,7 @@
-import extinction, numpy as np
-from extinction.noise import oneoverf
-from extinction import figurateur
-from extinction import ggx
+import mfgeo, numpy as np
+from mfgeo.noise import oneoverf
+from mfgeo import figurateur
+from mfgeo import ggx
 
 from matplotlib import pyplot as plt
 
@@ -23,7 +23,7 @@ for beta in np.linspace(-2, 3, 6):
 	slope_base = 1/np.tan(angle)
 
 	def tested(a):
-		return extinction.visibility(sigmas, slope_base/a)
+		return mfgeo.visibility(sigmas, slope_base/a)
 
 	def dist(a):
 		return np.sum((tested(a) - ref)**2)

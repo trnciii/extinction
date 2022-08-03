@@ -1,6 +1,6 @@
-import extinction, numpy as np
-from extinction.noise import oneoverf
-from extinction import figurateur
+import mfgeo, numpy as np
+from mfgeo.noise import oneoverf
+from mfgeo import figurateur
 
 from matplotlib import pyplot as plt
 
@@ -29,7 +29,7 @@ for beta, ax_s, ax_v in zip(np.linspace(-2, 3, rows), ax_s, ax_v):
 		angle = np.linspace(1/steps, np.pi/2, steps)
 
 		slope = 1/np.tan(angle)/alpha
-		tested = extinction.visibility(sigmas, slope)
+		tested = mfgeo.visibility(sigmas, slope)
 
 		ax_v.plot(angle, tested, label=f'{alpha:.1}')
 

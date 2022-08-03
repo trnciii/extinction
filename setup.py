@@ -13,10 +13,10 @@ except ImportError:
 from setuptools import find_packages
 
 setup(
-    name="extinction",
+    name="mfgeo",
     version="0.0.1",
     packages=find_packages(),
-    cmake_install_dir="extinction",
+    cmake_install_dir="mfgeo",
     include_package_data=True,
     python_requires=">=3.8",
 )
