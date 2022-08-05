@@ -21,7 +21,7 @@ angle = np.linspace(1/steps, np.pi/2, steps)
 smith = ggx.smith_g1(angle, 0.5)
 
 slope = 1/np.tan(angle)
-tested = mfgeo.visibility(sigmas, slope)
+tested = mfgeo.g1_distant(sigmas, slope)
 
 
 figs = {}

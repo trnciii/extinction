@@ -14,7 +14,7 @@ angle = np.linspace(1/angle_steps, np.pi/2, angle_steps)
 adjusted_alpha = 0.5
 sigma_ref = np.array([oneoverf.sequence(n, 0, rng) for rng in rngs])
 slope_base = 1/np.tan(angle)
-ref = np.array(mfgeo.visibility(sigma_ref, slope_base/adjusted_alpha))
+ref = np.array(mfgeo.g1_distant(sigma_ref, slope_base/adjusted_alpha))
 
 
 for beta in np.linspace(-2, 3, 6):
@@ -23,7 +23,7 @@ for beta in np.linspace(-2, 3, 6):
 	sigmas = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
 
 	def tested(a):
-		return mfgeo.visibility(sigmas, slope_base/a)
+		return mfgeo.g1_distant(sigmas, slope_base/a)
 
 	def dist(a):
 		return np.sum((tested(a) - ref)**2)

@@ -29,7 +29,7 @@ for beta, ax_s, ax_v in zip(np.linspace(-2, 3, rows), ax_s, ax_v):
 		angle = np.linspace(1/steps, np.pi/2, steps)
 
 		slope = 1/np.tan(angle)/alpha
-		tested = mfgeo.visibility(sigmas, slope)
+		tested = mfgeo.g1_distant(sigmas, slope)
 
 		ax_v.plot(angle, tested, label=f'{alpha:.1}')
 

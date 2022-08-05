@@ -5,6 +5,8 @@
 #endif
 
 
+namespace kernel{
+
 __device__ float g1_distant(const float* height, size_t realizations, size_t length, float ray_slope){
 	float visible = realizations;
 	for(size_t m=0; m<realizations; m++){
@@ -17,4 +19,7 @@ __device__ float g1_distant(const float* height, size_t realizations, size_t len
 	}
 
 	return visible / realizations;
+}
+
+
 }

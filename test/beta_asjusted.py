@@ -23,7 +23,7 @@ for beta in np.linspace(-2, 3, 6):
 	slope_base = 1/np.tan(angle)
 
 	def tested(a):
-		return mfgeo.visibility(sigmas, slope_base/a)
+		return mfgeo.g1_distant(sigmas, slope_base/a)
 
 	def dist(a):
 		return np.sum((tested(a) - ref)**2)

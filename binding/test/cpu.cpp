@@ -7,7 +7,7 @@ namespace py = pybind11;
 
 
 PYBIND11_MODULE(cpu, m) {
-	m.def("visibility", [](const py::array_t<float>& _height, const py::array_t<float>& _ray_slope){
+	m.def("g1_distant", [](const py::array_t<float>& _height, const py::array_t<float>& _ray_slope){
 		const auto height = _height.unchecked<2>();
 		const auto ray_slope = _ray_slope.unchecked<1>();
 
@@ -16,7 +16,7 @@ PYBIND11_MODULE(cpu, m) {
 
 		#pragma omp parallel for schedule(dynamic)
 		for(size_t s=0; s<ray_slope.shape(0); s++){
-			_vis(s) = g1_distant((float*)height.data(0, 0), height.shape(0), height.shape(1), ray_slope(s));
+			_vis(s) = kernel::g1_distant((float*)height.data(0, 0), height.shape(0), height.shape(1), ray_slope(s));
 		}
 		return visible;
 	});

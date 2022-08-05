@@ -25,12 +25,12 @@ slope = 1/np.tan(angle)
 
 
 t0 = time.time()
-tested_cpu = mfgeo.test.cpu.visibility(sigmas, slope)
+tested_cpu = mfgeo.test.cpu.g1_distant(sigmas, slope)
 t1 = time.time()
 print('cpu:', t1-t0)
 
 t0 = time.time()
-tested_gpu = mfgeo.test.gpu.visibility(sigmas, slope)
+tested_gpu = mfgeo.test.gpu.g1_distant(sigmas, slope)
 t1 = time.time()
 print('gpu:', t1-t0)
 
