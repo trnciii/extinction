@@ -11,7 +11,7 @@ install(TARGETS cpu DESTINATION ./test)
 # gpu
 find_package(CUDA)
 if(CUDA_FOUND)
-	cuda_add_library(kernel kernel.cu)
+	cuda_add_library(kernel cuda.cu)
 
 	pybind11_add_module(gpu MODULE gpu.cpp)
 	target_link_libraries(gpu PRIVATE kernel )
