@@ -1,2 +1,2 @@
 from .test import *
-from . import autocorrelation, averaged_density, figurateur, noise
+from . import autocorrelation, averaged_density, figurateur, noise, ggx
