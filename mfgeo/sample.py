@@ -24,17 +24,23 @@ if __name__ == "__main__":
 	import mfgeo
 	from matplotlib import pyplot as plt
 
-	rng = np.random.default_rng()
-	u = rng.uniform(size=(1000, 2))
 
-	hemi = uniform_hemisphere(u)
-	chemi = cosined_hemisphere(u)
+	rng = np.random.default_rng()
+	u = rng.uniform(size=(5000, 2))
+
+	uni = uniform_hemisphere(u)
+	cos = cosined_hemisphere(u)
+
+	z = uni[:, 2]
+
+	for alpha in np.linspace(0, 1, 11):
+		print(f'{alpha:.2f}', np.mean(mfgeo.ggx.ndf(z, alpha)*z) * (2*np.pi))
 
 
 	fig, ax = plt.subplots(1,1, subplot_kw=dict(projection='3d'))
 	ax.scatter(u[:, 0], u[:, 1], 0)
-	ax.scatter(hemi[:, 0], hemi[:, 1], hemi[:, 2], label='uniform')
-	ax.scatter(chemi[:, 0], chemi[:, 1], chemi[:, 2], label='cosined')
+	ax.scatter(uni[:, 0], uni[:, 1], uni[:, 2], label='uniform')
+	ax.scatter(cos[:, 0], cos[:, 1], cos[:, 2], label='cosined')
 
 	plt.legend()
 	plt.show()
