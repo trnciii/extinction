@@ -34,7 +34,7 @@ if __name__ == "__main__":
 	z = uni[:, 2]
 
 	for alpha in np.linspace(0, 1, 11):
-		print(f'{alpha:.2f}', np.mean(mfgeo.ggx.ndf(z, alpha)*z) * (2*np.pi))
+		print(f'{alpha:.2f}', np.mean(mfgeo.ggx.ndf(np.arccos(z), alpha)*z) * (2*np.pi))
 
 
 	fig, ax = plt.subplots(1,1, subplot_kw=dict(projection='3d'))
