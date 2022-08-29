@@ -26,8 +26,8 @@ for alpha in np.linspace(0.1, 1, 10):
 		sum_D = np.mean(mo * ggx.ndf(np.arccos(m[:, 2]), alpha)) * 2*np.pi
 
 		area = wo[2]/sum_D
-		g1 = ggx.smith_g1(th, alpha)
-		diff = np.abs(area-g1)
+		smith = ggx.smith_g1(th, alpha)
+		diff = np.abs(area-smith)
 
-		print(f'{th:0.3f} {area=:.10f} {g1=:.10f} {diff:.10f}')
+		print(f'{th:0.3f} {area=:.10f} {smith=:.10f} {diff:.10f}')
 	print()
