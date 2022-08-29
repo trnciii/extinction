@@ -37,10 +37,11 @@ if __name__ == "__main__":
 		print(f'{alpha:.2f}', np.mean(mfgeo.ggx.ndf(np.arccos(z), alpha)*z) * (2*np.pi))
 
 
-	fig, ax = plt.subplots(1,1, subplot_kw=dict(projection='3d'))
-	ax.scatter(u[:, 0], u[:, 1], 0)
-	ax.scatter(uni[:, 0], uni[:, 1], uni[:, 2], label='uniform')
-	ax.scatter(cos[:, 0], cos[:, 1], cos[:, 2], label='cosined')
+	fig, ax = plt.subplots(1,1, subplot_kw=dict(projection='3d'), constrained_layout=True)
+	n = 800
+	ax.scatter(u[:n, 0], u[:n, 1], 0)
+	ax.scatter(uni[:n, 0], uni[:n, 1], uni[:n, 2], label='uniform')
+	ax.scatter(cos[:n, 0], cos[:n, 1], cos[:n, 2], label='cosined')
 
 	plt.legend()
 	plt.show()
