@@ -7,8 +7,7 @@ from matplotlib import pyplot as plt
 def probability(x, sample):
 	hist, bin_edges = np.histogram(sample, bins='auto', density=True)
 	index = np.digitize(x, bin_edges)
-
-	return np.where([0<i<hist.size for i in index],
+	return np.where((0<index) * (index<hist.size),
 		np.take(hist, index-1, mode='clip'),
 		0
 	)
