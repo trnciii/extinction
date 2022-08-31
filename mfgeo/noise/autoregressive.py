@@ -3,14 +3,14 @@ import numpy as np
 name = 'AR'
 
 def sequence(n, k, rng):
-	if k>1: k = 1
-	if k<-1: k = -1
+	if not (-1<k<1):
+		print(f'autoregressive process is not stationary. {k=}')
 
 	ret = np.empty(n)
 	ret[0] = rng.normal()
 	for i in range(n-1):
 		ret[i+1] = k*ret[i] + rng.normal()
-	return ret/np.std(ret)
+	return ret
 
 
 def main():
