@@ -2,7 +2,7 @@ from mfgeo import ggx
 from mfgeo import figurateur
 import numpy as np
 from matplotlib import pyplot as plt
-
+import path
 
 ref_g1 = [9.4031686e-01, 9.3310797e-01, 9.2485082e-01, 9.1534841e-01, 9.0435863e-01,
 			 8.9158219e-01, 8.7664890e-01, 8.5909742e-01, 8.3835226e-01, 8.1369340e-01,
@@ -30,5 +30,5 @@ plt.plot(ref_arngle, g, label='mine a=0.1**0.5')
 
 
 plt.legend()
-plt.savefig('result/distribution.png', dpi=150)
+plt.savefig(path.out('distribution.png'), dpi=150)
 plt.show()

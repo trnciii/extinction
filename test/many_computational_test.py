@@ -1,6 +1,7 @@
 import mfgeo, numpy as np
 from mfgeo.noise import oneoverf
 from mfgeo import figurateur
+import path
 
 from matplotlib import pyplot as plt
 
@@ -33,6 +34,5 @@ for beta, ax_s, ax_v in zip(np.linspace(-2, 3, rows), ax_s, ax_v):
 
 		ax_v.plot(angle, tested, label=f'{alpha:.1}')
 
-
-fig.savefig('result/betas.png')
+fig.savefig(path.out('betas.png'))
 plt.show()

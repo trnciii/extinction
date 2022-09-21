@@ -1,10 +1,9 @@
 from mfgeo import noise, figurateur
 import numpy as np
 from matplotlib import pyplot as plt
-import os
+import os, path
 
-outdir = 'result/sandbox'
-os.makedirs(outdir, exist_ok=True)
+outdir = path.out()
 
 
 figs = {}

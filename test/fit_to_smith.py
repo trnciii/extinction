@@ -52,6 +52,7 @@ for beta in np.linspace(-2, 3, 6):
 plt.plot(angle, smith_g1(angle, alpha), label=f'smith (ref). a = {alpha:.2f}', linewidth=4)
 plt.legend()
 
+import path
 plt.tight_layout()
-plt.savefig('result/fit_tests.png', dpi=200)
+plt.savefig(path.out('fit_tests.png'), dpi=200)
 plt.show()

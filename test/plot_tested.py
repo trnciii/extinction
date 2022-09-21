@@ -4,7 +4,7 @@ from mfgeo import figurateur
 from mfgeo import ggx
 
 from matplotlib import pyplot as plt
-import os
+import os, path
 import time
 
 n = 1000
@@ -39,5 +39,5 @@ figs['noises'] = plt.figure()
 figurateur.cloud_and_hist(figs['noises'], sigmas[:100])
 
 
-figurateur.save(figs)
+figurateur.save(figs, out_dir=path.out())
 figurateur.show(figs)

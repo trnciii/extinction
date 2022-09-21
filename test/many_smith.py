@@ -1,6 +1,7 @@
 import mfgeo, numpy as np
 from matplotlib import pyplot as plt
 from mfgeo import ggx
+import path
 
 n = 1000
 
@@ -12,5 +13,5 @@ for alpha in np.linspace(0.1, 1, 10):
 	plt.plot(angle, smith, label=f'{alpha:.1}')
 
 plt.legend()
-plt.savefig('result/smith.png')
+plt.savefig(path.out('smith.png'))
 plt.show()

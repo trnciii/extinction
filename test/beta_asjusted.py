@@ -2,6 +2,7 @@ import mfgeo, numpy as np
 from mfgeo.noise import oneoverf
 from mfgeo import figurateur
 from mfgeo import ggx
+import path
 
 from matplotlib import pyplot as plt
 
@@ -50,5 +51,5 @@ plt.plot(angle, ggx.smith_g1(angle, alpha), label=f'smith (ref). a = {alpha:.2f}
 plt.legend()
 
 plt.tight_layout()
-plt.savefig('result/fit_tests.png', dpi=200)
+plt.savefig(path.out('fit_tests.png'), dpi=200)
 plt.show()

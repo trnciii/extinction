@@ -3,6 +3,7 @@ from mfgeo.noise import oneoverf
 from mfgeo import figurateur
 import time
 from matplotlib import pyplot as plt
+import path
 
 
 n = 10000
@@ -53,5 +54,5 @@ plt.plot(angle, ref, label=f'b={0:.2f} (ref). a = {adjusted_alpha:.2f}', linewid
 plt.legend()
 
 plt.tight_layout()
-plt.savefig('result/fit_to_b0.png', dpi=200)
+plt.savefig(path.out('fit_to_b0.png'), dpi=200)
 plt.show()

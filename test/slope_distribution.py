@@ -2,6 +2,7 @@ import numpy as np
 from mfgeo.noise import oneoverf
 from mfgeo import figurateur
 from matplotlib import pyplot as plt
+import path
 
 
 def probability(x, sample):
@@ -40,5 +41,5 @@ for beta in range(-1, 2):
 print(flush=True)
 
 plt.legend()
-plt.savefig('result/sampled_slope_distribution.png')
+plt.savefig(path.out('sampled_slope_distribution.png'))
 plt.show()
