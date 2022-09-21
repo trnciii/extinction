@@ -1,5 +1,5 @@
 import numpy as np
-from mfgeo.noise import oneoverf
+from mfgeo.noise import oneoverf, autoregressive
 from mfgeo import figurateur
 from matplotlib import pyplot as plt
 import path
@@ -14,13 +14,13 @@ def probability(x, sample):
 	)
 
 
-n = 1000
+for n in [100, 1000, 10000]:
+	rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
 
-rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
+	# for beta in np.linspace(-0.99, 0.99, 3):
+	beta = 0
 
-for beta in range(-1, 2):
-
-	height = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
+	height = np.array([autoregressive.sequence(n+1000, beta, rng) for rng in rngs])[-n:]
 	slope = np.diff(height)
 
 	hist, bin_edges = np.histogram(slope, bins='auto', density=True)
@@ -36,10 +36,10 @@ for beta in range(-1, 2):
 
 	print()
 
-	plt.plot(bin_edges[:-1], hist, label=f'{beta=:2}')
+	plt.plot(bin_edges[:-1], hist, label=f'{beta=:2} {n=}')
 
-print(flush=True)
+	print(flush=True)
 
 plt.legend()
-plt.savefig(path.out('sampled_slope_distribution.png'))
+plt.savefig(path.out(f'autoregressive_{beta:2}.png'))
 plt.show()
