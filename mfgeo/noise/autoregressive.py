@@ -2,15 +2,15 @@ import numpy as np
 
 name = 'AR'
 
-def sequence(n, k, rng):
+def sequence(n, k, rng, margin=1000):
 	if not (-1<k<1):
 		print(f'autoregressive process is not stationary. {k=}')
 
-	ret = np.empty(n)
+	ret = np.empty(n+margin)
 	ret[0] = rng.normal()
-	for i in range(n-1):
+	for i in range(n+margin-1):
 		ret[i+1] = k*ret[i] + rng.normal()
-	return ret
+	return ret[-n:]
 
 
 def main():

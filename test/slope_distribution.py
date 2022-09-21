@@ -18,9 +18,9 @@ for n in [100, 1000, 10000]:
 	rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
 
 	# for beta in np.linspace(-0.99, 0.99, 3):
-	beta = 0
+	beta = -0.99
 
-	height = np.array([autoregressive.sequence(n+1000, beta, rng) for rng in rngs])[-n:]
+	height = np.array([autoregressive.sequence(n, beta, rng) for rng in rngs])
 	slope = np.diff(height)
 
 	hist, bin_edges = np.histogram(slope, bins='auto', density=True)
