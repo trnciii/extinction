@@ -2,11 +2,14 @@ import numpy as np
 
 name = '1/f'
 
-def sequence(n, beta, rng):
+def sequence(n, b, rng):
+	if not (-1<b<1):
+		print(f'1/f sequence is not stationary. {b=}')
+
 	kmax = n//2
 
 	f = np.linspace(1, kmax, kmax)/(2*np.pi)
-	C = 1/np.abs(f**beta)
+	C = 1/np.abs(f**b)
 
 	phase = np.array(2*np.pi*rng.random(kmax))
 	Cpos = C*np.exp(1j*phase)
