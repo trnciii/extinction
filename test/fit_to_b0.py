@@ -7,7 +7,7 @@ import path
 
 
 n = 10000
-rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
+rngs = [np.random.default_rng(seed=mu) for mu in range(10000)]
 
 angle_steps = 100
 angle = np.linspace(1/angle_steps, np.pi/2, angle_steps)
@@ -18,7 +18,7 @@ slope_base = 1/np.tan(angle)
 ref = np.array(mfgeo.g1_distant(sigma_ref, slope_base/adjusted_alpha))
 
 
-for beta in np.linspace(-2, 3, 6):
+for beta in np.linspace(-0.99, 0.99, 3):
 	print(f'b : {beta}')
 	t0 = time.time()
 	sigmas = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])

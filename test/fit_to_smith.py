@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 
 
 n = 10000
-rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
+rngs = [np.random.default_rng(seed=mu) for mu in range(10000)]
 
 
 angle_steps = 100
@@ -17,7 +17,7 @@ alpha = 0.4
 ref = smith_g1(angle, alpha)
 
 
-for beta in np.linspace(-2, 3, 6):
+for beta in np.linspace(-0.99, 0.99, 3):
 	print('beta :', beta, flush=True)
 	t0 = time.time()
 	sigmas = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])

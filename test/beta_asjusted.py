@@ -18,7 +18,7 @@ alpha = 0.4
 ref = ggx.smith_g1(angle, alpha)
 
 
-for beta in np.linspace(-2, 3, 6):
+for beta in np.linspace(-0.99, 0.99, 3):
 	print('beta', beta, flush=True)
 	sigmas = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
 	slope_base = 1/np.tan(angle)

@@ -10,7 +10,7 @@ n = 1000
 rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
 timeline = np.linspace(1, n, n)
 
-rows = 6
+rows = 5
 
 fig = plt.figure(figsize=(16, 12), constrained_layout=True)
 figs_s, figs_v = fig.subfigures(1, 2, width_ratios=[2.5,1])
@@ -18,12 +18,12 @@ ax_v = figs_v.subplots(rows, 1)
 ax_s = figs_s.subplots(rows, 1)
 
 
-for beta, ax_s, ax_v in zip(np.linspace(-2, 3, rows), ax_s, ax_v):
+for beta, ax_s, ax_v in zip(np.linspace(-0.99, 0.99, rows), ax_s, ax_v):
 	key = f'b{beta:+.1f}'
 
 	sigmas = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
 	figurateur.cloud(ax_s, timeline, sigmas[:20])
-	ax_s.set_title(f'b = {beta}')
+	ax_s.set_title(f'b = {beta:.4f}')
 
 	for alpha in np.linspace(0.1, 1, 10):
 		steps = 1000
