@@ -18,18 +18,17 @@ for n in [100, 1000, 10000]:
 	rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
 
 	# for beta in np.linspace(-0.99, 0.99, 3):
-	beta = -0.99
+	beta = 0.99
 
-	height = np.array([autoregressive.sequence(n, beta, rng) for rng in rngs])
+	height = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
 	slope = np.diff(height)
 
 	hist, bin_edges = np.histogram(slope, bins='auto', density=True)
 
-
-	print(f'{hist.size=}')
-	print(hist)
-	print(f'{bin_edges.size=}')
-	print(bin_edges)
+	# print(f'{hist.size=}')
+	# print(hist)
+	# print(f'{bin_edges.size=}')
+	# print(bin_edges)
 
 	sample_slope = [-1, 0, 1]
 	print(f'prob={probability(sample_slope, slope)}')

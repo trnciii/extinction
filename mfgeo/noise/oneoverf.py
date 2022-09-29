@@ -8,7 +8,7 @@ def sequence(n, b, rng):
 
 	kmax = n//2
 
-	f = np.linspace(1, kmax, kmax)/(2*np.pi)
+	f = np.linspace(0.5, 1, kmax)/(2*np.pi)
 	C = 1/np.abs(f**b)
 
 	phase = np.array(2*np.pi*rng.random(kmax))
