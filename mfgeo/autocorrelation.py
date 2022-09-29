@@ -7,7 +7,7 @@ def acf(x, window=None):
 	return npcorr/npcorr[0]
 
 
-def main():
+if __name__ == '__main__':
 	from matplotlib import pyplot as plt
 	import sys
 
@@ -22,13 +22,13 @@ def main():
 	for generator in [autoregressive, oneoverf]:
 
 		n = 1000
-		num_k = 7
+		num_k = 5
 
 		figs[generator.name], ax = plt.subplots(num_k, 2, tight_layout=True, figsize=(19.2, 10.8))
 
 		rng = np.random.default_rng(seed=1234)
 
-		for k, (ax_nosie, ax_ac) in zip(np.linspace(-1, 1, num_k), ax):
+		for k, (ax_nosie, ax_ac) in zip(np.linspace(-0.99, 0.99, num_k), ax):
 			noise = generator.sequence(n, k, rng)
 			ac = acf(noise)
 
@@ -41,7 +41,3 @@ def main():
 
 	if not '-b' in sys.argv:
 		figurateur.show(figs)
-
-
-if __name__ == '__main__':
-	main()
