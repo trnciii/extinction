@@ -2,8 +2,8 @@ import numpy as np
 
 name = 'AR'
 
-def sequence(n, k, rng, margin=1000):
-	if not (-1<k<1):
+def sequence(n, k, rng, margin=1000, silent=False):
+	if (not (-1<k<1)) and (not silent):
 		print(f'autoregressive process is not stationary. {k=}')
 
 	ret = np.empty(n+margin)

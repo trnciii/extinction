@@ -2,8 +2,8 @@ import numpy as np
 
 name = '1/f'
 
-def sequence(n, b, rng):
-	if not (-1<b<1):
+def sequence(n, b, rng, silent=False):
+	if (not (-1<b<1)) and (not silent):
 		print(f'1/f sequence is not stationary. {b=}')
 
 	kmax = n//2
