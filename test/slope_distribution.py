@@ -14,31 +14,43 @@ def probability(x, sample):
 	)
 
 
-for n in [100, 1000, 10000]:
-	rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
+figs = {}
 
-	# for beta in np.linspace(-0.99, 0.99, 3):
-	beta = 0.99
+cols = 5
 
-	height = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
-	slope = np.diff(height)
+for generator in [oneoverf, autoregressive]:
+	figs[generator.name], axes = plt.subplots(2, cols, constrained_layout=True, figsize=(20, 5))
+	for c, beta in enumerate(np.linspace(-0.99, 0.99, cols)):
+		ax_h, ax_s = axes[:, c]
+		ax_h.set_title(f'height {beta:.2f}')
+		ax_s.set_title(f'slope  {beta:.2f}')
 
-	hist, bin_edges = np.histogram(slope, bins='auto', density=True)
+		rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
 
-	# print(f'{hist.size=}')
-	# print(hist)
-	# print(f'{bin_edges.size=}')
-	# print(bin_edges)
+		_n = [10**e for e in range(2,5)]
+		height_o = np.array([generator.sequence(max(_n), beta, rng, silent=True) for rng in rngs])
 
-	sample_slope = [-1, 0, 1]
-	print(f'prob={probability(sample_slope, slope)}')
+		for n in _n:
+			height = height_o[:n]
+			slope = np.diff(height)
 
-	print()
+			hist_h, bin_edges_h = np.histogram(height, bins='auto', density=True)
+			hist_s, bin_edges_s = np.histogram(slope, bins='auto', density=True)
 
-	plt.plot(bin_edges[:-1], hist, label=f'{beta=:2} {n=}')
+			# print(f'{hist.size=}')
+			# print(hist)
+			# print(f'{bin_edges.size=}')
+			# print(bin_edges)
 
-	print(flush=True)
+			# sample_slope = [-1, 0, 1]
+			# print(f'prob={probability(sample_slope, slope)}')
+			# print(end='',flush=True)
 
-plt.legend()
-plt.savefig(path.out(f'autoregressive_{beta:2}.png'))
-plt.show()
+			ax_h.plot(bin_edges_h[:-1], hist_h, label=f'{n=}')
+			ax_s.plot(bin_edges_s[:-1], hist_s, label=f'{n=}')
+
+			ax_h.legend()
+			ax_s.legend()
+
+figurateur.save(figs, out_dir=path.out())
+figurateur.show(figs)
