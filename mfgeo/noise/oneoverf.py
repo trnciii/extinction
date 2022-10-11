@@ -21,15 +21,12 @@ def sequence(n, b, rng, silent=False):
 	re = noise.real[:n]
 	return re/np.std(re)
 
-	return noise.real[:n]
-
-
 
 def main():
-	from extinction import figurateur
+	from mfgeo import figurateur
 
 	n = 1000
-	beta = 1
+	beta = 0.99
 	seqs = 100
 
 	rngs = [np.random.default_rng(seed=i) for i in range(seqs)]
