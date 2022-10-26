@@ -2,7 +2,7 @@ import numpy as np
 
 name = '1/f'
 
-def sequence(n, b, rng, silent=False):
+def sequence(n, b, rng, phase_range=(0, 2*np.pi), silent=False):
 	if (not (-1<b<1)) and (not silent):
 		print(f'1/f sequence is not stationary. {b=}')
 
@@ -11,7 +11,7 @@ def sequence(n, b, rng, silent=False):
 	f = np.linspace(0.5, 1, kmax)/(2*np.pi)
 	C = 1/np.abs(f**b)
 
-	phase = np.array(2*np.pi*rng.random(kmax))
+	phase = (phase_range[1]-phase_range[0])*np.array(rng.random(kmax)) + phase_range[0]
 	Cpos = C*np.exp(1j*phase)
 	Cneg = np.flip(np.conj(Cpos))
 
