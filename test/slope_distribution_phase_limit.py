@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.stats import norm
 from mfgeo.noise import oneoverf, autoregressive
 from mfgeo import figurateur
 from matplotlib import pyplot as plt
@@ -13,9 +14,9 @@ def probability(x, sample):
 		0
 	)
 
-phase = (1, 1+2*np.pi)
+phase = (0, 1*np.pi)
 
-for n in [100, 1000, 10000]:
+for n in [100, 1000, 10000, 100000]:
 	rngs = [np.random.default_rng(seed=mu) for mu in range(1000)]
 
 	# for beta in np.linspace(-0.99, 0.99, 3):
@@ -39,9 +40,13 @@ for n in [100, 1000, 10000]:
 
 	plt.plot(bin_edges[:-1], hist, label=f'{beta=:2} {n=}')
 
+	mean, std = norm.fit(slope)
+	x = np.linspace(-20, 20, 100)
+	plt.plot(x, norm.pdf(x, mean, std), label=f'fit {beta:2}')
+
 	print(flush=True)
 
 plt.xlim((-20, 20))
 plt.legend()
-plt.savefig(path.out(f'1f_{phase[0]:.1f}-{phase[1]:.1f}_{beta:2}.png'))
-# plt.show()
+plt.savefig(path.out(f'1f_{phase[0]:.1f}-{phase[1]:.1f}_{beta:2}_slope.png'))
+plt.show()
