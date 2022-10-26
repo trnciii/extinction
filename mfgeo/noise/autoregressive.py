@@ -14,7 +14,7 @@ def sequence(n, k, rng, margin=1000, silent=False):
 
 
 def main():
-	from extinction import figurateur
+	from mfgeo import figurateur
 
 	n = 1000
 	k = 1
