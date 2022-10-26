@@ -51,8 +51,6 @@ def show(figs, exclude={}):
 	for k, v  in figs.items():
 		if k in exclude:
 			plt.close(v)
-		else:
-			v.canvas.set_window_title(k)
 
 	print("", end='', flush=True)
 	plt.show()
