@@ -21,8 +21,9 @@ ax_s = figs_s.subplots(rows, 1)
 for beta, ax_s, ax_v in zip(np.linspace(-0.99, 0.99, rows), ax_s, ax_v):
 	key = f'b{beta:+.1f}'
 
-	sigmas = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
-	figurateur.cloud(ax_s, timeline, sigmas[:20])
+	sigmas = np.array([oneoverf.sequence(n, beta, rng, phase_range=(0, 0.5*np.pi)) for rng in rngs])
+	sigmas = sigmas[:, 200:800]
+	figurateur.cloud(ax_s, timeline[:600], sigmas[:20])
 	ax_s.set_title(f'b = {beta:.4f}')
 
 	for alpha in np.linspace(0.1, 1, 10):
