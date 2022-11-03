@@ -1,20 +1,24 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from mfgeo.autocorrelation import acf
+from mfgeo import dist
+from scipy.stats import norm
 
 
 def input_ac():
 	length = 2**10
 	lin = np.arange(length)
 
-	ac = 1/np.power(1+lin, 0.5)
+	ac = 1/np.power(1+lin, 0.2)
 
-	# ac = np.cos(lin/10)*np.exp(-lin/10)
+	# s = length/100
+	# ac = np.cos(lin/s)*np.exp(-lin/s)
 
 	# ac = np.zeros(length)
 	# ac[0] = 1
 
-	# ac = np.exp(-lin)
+	# s = length/10
+	# ac = np.exp(-lin/s)
 
 	return ac
 
@@ -35,19 +39,57 @@ def gen_height(ac):
 	return height
 
 
+def plot_heights(height, slope):
+	_, (ax_h, ax_s) = plt.subplots(2, 1, figsize=(20, 5), constrained_layout=True)
+	ax_h.plot(range(len(height)), height, label='height')
+	ax_s.plot(range(len(slope)), slope, label='slope')
+
+
+
+_, (ax_c, ax_d) = plt.subplots(1, 2, figsize=(14,4), constrained_layout=True)
 
 ac_in = input_ac()
-plt.plot(range(len(ac_in)), ac_in, label='ac_in')
+ax_c.plot(range(len(ac_in)), ac_in, label='ac_in')
 
 
+# height and slope
 height = gen_height(ac_in)
-plt.plot(range(len(height)), height, label='height')
+slope = np.diff(height.real)
+
+# plot_heights(height, slope)
 
 
+# autocorrelation
 ac_r = acf(height)
-plt.plot(range(len(ac_r)), ac_r/ac_r[0], label='ac_result')
+ax_c.plot(range(len(ac_r)), ac_r/ac_r[0], label='ac_result')
+
+
+# numerical distribution
+hist, bins = np.histogram(slope, bins='auto', density=True)
+x = bins[:-1]
+
+ax_d.plot(x, hist, label='numerical')
+
+
+# normal distribution
+mean = np.mean(slope)
+std = np.std(slope)
+normal = norm.pdf(x, loc=mean, scale=std)
+
+ax_d.plot(x, normal, label=f'normal {mean:.2f} {std:.2f}')
+
+
+# common distribution
+profile = dist.beckmann
+alpha = 0.4
+angle = np.arctan(x)
+theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
+theo /= np.sum(theo) * (bins[1] - bins[0])
+
+ax_d.plot(x, theo, label=f'{profile.name()} a={alpha}')
 
 
 print(flush=True)
-plt.legend()
+ax_c.legend()
+ax_d.legend()
 plt.show()
