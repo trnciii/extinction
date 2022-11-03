@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 find_package(pybind11 CONFIG REQUIRED)
 
 
-pybind11_add_module(ggx MODULE ggx.cpp)
-install(TARGETS ggx DESTINATION .)
+pybind11_add_module(distributions MODULE distributions.cpp)
+install(TARGETS distributions DESTINATION .)
 
 add_subdirectory(test)
