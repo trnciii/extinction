@@ -1,6 +1,6 @@
 import numpy as np, scipy
 from mfgeo import figurateur
-from mfgeo.autocorrelation import acf
+from mfgeo import acf
 from matplotlib import pyplot as plt
 
 ndim = 100

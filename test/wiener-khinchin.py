@@ -1,7 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from mfgeo.autocorrelation import acf
-from mfgeo import dist
+from mfgeo import dist, acf
 from scipy.stats import norm
 
 
