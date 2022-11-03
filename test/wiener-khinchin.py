@@ -25,10 +25,11 @@ def gen_height(ac):
 	freq = np.fft.fftfreq(len(ac))
 
 	rng = np.random.default_rng(seed=0)
-	phase = np.array(2j*np.pi*rng.random(len(fft)//2 + 1))
+	n = len(fft)//2 + 1
+	phase = 2j*np.pi*rng.random(n)
 	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
 
-	margin = int(len(ac)*0.15)
+	margin = int(len(ac)*0.2)
 	height = np.fft.ifft(fft*phase_sym)[margin:len(ac)-margin]
 
 	return height
