@@ -3,47 +3,48 @@ from matplotlib import pyplot as plt
 from mfgeo.autocorrelation import acf
 
 
-length = 2**10
-lin = np.arange(length)
+def input_ac():
+	length = 2**10
+	lin = np.arange(length)
 
-# ac = 1/np.power(1+lin, 0.2)
+	ac = 1/np.power(1+lin, 0.5)
 
-ac = np.cos(lin/10)*np.exp(-lin/10)
+	# ac = np.cos(lin/10)*np.exp(-lin/10)
 
-# ac = np.zeros(length)
-# ac[0] = 1
+	# ac = np.zeros(length)
+	# ac[0] = 1
 
-# ac = np.exp(-lin)
+	# ac = np.exp(-lin)
 
-plt.plot(range(len(ac)), ac, label='ac_in')
-
-
-psd = np.fft.fft(ac)
-fft = np.sqrt(psd)
-freq = np.fft.fftfreq(len(ac))
-
-# plt.plot(freq, psd.real, label='psd.real')
-# plt.plot(freq, psd.imag, label='psd.imag')
-
-# plt.scatter(freq, fft.real, label='fft.real')
-# plt.scatter(freq, fft.imag, label='fft.imag')
+	return ac
 
 
-rng = np.random.default_rng(seed=0)
-phase = np.array(2j*np.pi*rng.random(len(fft)//2 + 1))
-phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
+def gen_height(ac):
+	psd = np.fft.fft(ac)
+	fft = np.sqrt(psd)
+	freq = np.fft.fftfreq(len(ac))
+
+	rng = np.random.default_rng(seed=0)
+	phase = np.array(2j*np.pi*rng.random(len(fft)//2 + 1))
+	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
+
+	margin = int(len(ac)*0.15)
+	height = np.fft.ifft(fft*phase_sym)[margin:len(ac)-margin]
+
+	return height
 
 
-margin = int(length*0.15)
-height = np.fft.ifft(fft*phase_sym)[margin:length-margin]
-print(height)
 
+ac_in = input_ac()
+plt.plot(range(len(ac_in)), ac_in, label='ac_in')
+
+
+height = gen_height(ac_in)
 plt.plot(range(len(height)), height, label='height')
 
-ac = acf(height)
-print('ac')
-print(ac)
-plt.plot(range(len(ac)), ac/ac[0], label='ac_result')
+
+ac_r = acf(height)
+plt.plot(range(len(ac_r)), ac_r/ac_r[0], label='ac_result')
 
 
 print(flush=True)
