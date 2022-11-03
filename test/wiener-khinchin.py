@@ -4,13 +4,16 @@ from mfgeo.autocorrelation import acf
 
 
 length = 2**10
+lin = np.arange(length)
 
-ac = 1/np.power(1+np.arange(length), 0.5)
+# ac = 1/np.power(1+lin, 0.2)
+
+ac = np.cos(lin/10)*np.exp(-lin/10)
 
 # ac = np.zeros(length)
 # ac[0] = 1
 
-# ac = np.exp(-np.arange(length))
+# ac = np.exp(-lin)
 
 plt.plot(range(len(ac)), ac, label='ac_in')
 
