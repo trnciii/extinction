@@ -5,7 +5,7 @@ from scipy.stats import norm
 
 
 def input_ac():
-	length = 2**10
+	length = 2**15
 	lin = np.arange(length)
 
 	ac = 1/np.power(1+lin, 0.2)
@@ -75,12 +75,12 @@ mean = np.mean(slope)
 std = np.std(slope)
 normal = norm.pdf(x, loc=mean, scale=std)
 
-ax_d.plot(x, normal, label=f'normal {mean:.2f} {std:.2f}')
+ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
 
 
 # common distribution
-profile = dist.beckmann
-alpha = 0.4
+profile = dist.ggx
+alpha = 0.015
 angle = np.arctan(x)
 theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
 theo /= np.sum(theo) * (bins[1] - bins[0])
