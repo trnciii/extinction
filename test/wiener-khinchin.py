@@ -6,18 +6,16 @@ from scipy.stats import norm
 
 def input_ac():
 	length = 2**15
-	lin = np.arange(length)
+	lin = np.linspace(0, 1000, length)
 
-	ac = 1/np.power(1+lin, 0.2)
+	ac = 1/np.power(1+lin, 0.5)
 
-	# s = length/100
-	# ac = np.cos(lin/s)*np.exp(-lin/s)
+	# ac = np.cos(lin/10)*np.exp(-lin/100)
 
 	# ac = np.zeros(length)
 	# ac[0] = 1
 
-	# s = length/10
-	# ac = np.exp(-lin/s)
+	# ac = np.exp(-lin/100)
 
 	return ac
 
