@@ -1,19 +1,19 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from mfgeo import dist, acf
+from mfgeo import dist, acf, g1_distant
 from scipy.stats import norm
 
 
 def input_ac():
-	length = 2**15
+	length = 2**24
 	lin = np.linspace(0, 1000, length)
 
-	ac = 1/np.power(1+lin, 0.5)
+	# ac = 1/np.power(1+lin, 0.5)
 
 	# ac = np.cos(lin/10)*np.exp(-lin/100)
 
-	# ac = np.zeros(length)
-	# ac[0] = 1
+	ac = np.zeros(length)
+	ac[0] = 1
 
 	# ac = np.exp(-lin/100)
 
@@ -43,7 +43,7 @@ def gen_height(ac):
 	# print('height')
 	# print(height[:100])
 
-	return height.real/np.std(height.real)
+	return height.real/np.amax(height.real)
 
 
 def plot_heights(height, slope):
@@ -59,7 +59,9 @@ def plot_heights(height, slope):
 
 
 
-_, (ax_c, ax_d) = plt.subplots(1, 2, figsize=(14,4), constrained_layout=True)
+_, axes = plt.subplots(1, 3, figsize=(19,4), constrained_layout=True)
+(ax_c, ax_d, ax_g) = axes
+
 
 ac_in = input_ac()
 ax_c.plot(range(len(ac_in)), ac_in, label='ac_in')
@@ -92,9 +94,9 @@ normal = norm.pdf(x, loc=mean, scale=std)
 ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
 
 
-# common distribution
-profile = dist.ggx
-alpha = 0.26
+# compare D
+profile = dist.beckmann
+alpha = 0.52
 angle = np.arctan(x)
 theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
 theo /= np.sum(theo) * (bins[1] - bins[0])
@@ -102,7 +104,18 @@ theo /= np.sum(theo) * (bins[1] - bins[0])
 ax_d.plot(x, theo, label=f'{profile.name()} a={alpha}')
 
 
+# compare G
+n = 100
+angle = np.linspace(1/n, np.pi/2, n)
+
+window = len(height)//2
+_h = np.array([height[i:i+window] for i in range(0, window, window//1000)])
+G = g1_distant(_h, 1/np.tan(angle))
+
+ax_g.plot(angle, G, label='tested')
+ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith')
+
+
 print(flush=True)
-ax_c.legend()
-ax_d.legend()
+for a in axes: a.legend()
 plt.show()
