@@ -47,9 +47,15 @@ def gen_height(ac):
 
 
 def plot_heights(height, slope):
-	_, (ax_h, ax_s) = plt.subplots(2, 1, figsize=(20, 5), constrained_layout=True)
-	ax_h.plot(range(len(height)), height, label='height')
-	ax_s.plot(range(len(slope)), slope, label='slope')
+	_, ax = plt.subplots(2, 2, figsize=(20, 3), width_ratios=[4,1], constrained_layout=True)
+	(top_l, top_r), (bottom_l, bottom_r) = ax
+
+	top_l.plot(range(len(height)), height, label='height')
+	bottom_l.plot(range(len(slope)), slope, label='slope')
+
+	n = 100
+	top_r.plot(range(n), height[:n], label='height')
+	bottom_r.plot(range(n), slope[:n], label='slope')
 
 
 
