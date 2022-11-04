@@ -23,19 +23,29 @@ def input_ac():
 
 
 def gen_height(ac):
+	ac = np.concatenate((ac[:-1], np.flip(ac[1:])))
+
 	psd = np.fft.fft(ac)
-	fft = np.sqrt(psd)
+	# print('psd')
+	# print(psd[:50], '...', psd[-50:], sep='\n')
+	# assert np.allclose(psd.imag, 0)
+	# assert np.all(psd.real > 0)
+
+	amp = np.sqrt(psd.real)
 	freq = np.fft.fftfreq(len(ac))
 
 	rng = np.random.default_rng(seed=0)
-	n = len(fft)//2 + 1
+	n = len(amp)//2 + 1
 	phase = 2j*np.pi*rng.random(n)
 	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
 
 	margin = int(len(ac)*0.2)
-	height = np.fft.ifft(fft*phase_sym)[margin:len(ac)-margin]
+	height = np.fft.ifft(amp*phase_sym)[margin:len(ac)-margin]
 
-	return height
+	# print('height')
+	# print(height[:100])
+
+	return height.real
 
 
 def plot_heights(height, slope):
