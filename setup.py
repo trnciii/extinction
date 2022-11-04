@@ -19,4 +19,9 @@ setup(
     cmake_install_dir="mfgeo",
     include_package_data=True,
     python_requires=">=3.8",
+    install_requires=[
+        "numpy",
+        "scipy",
+        "matplotlib",
+    ],
 )
