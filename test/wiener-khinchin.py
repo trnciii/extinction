@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from mfgeo import dist, acf, g1_distant
 from scipy.stats import norm
+import path
 
 
 def input_ac():
@@ -47,7 +48,7 @@ def gen_height(ac):
 
 
 def plot_heights(height, slope):
-	_, ax = plt.subplots(2, 2, figsize=(20, 3), width_ratios=[4,1], constrained_layout=True)
+	f, ax = plt.subplots(2, 2, figsize=(20, 3), width_ratios=[4,1], constrained_layout=True)
 	(top_l, top_r), (bottom_l, bottom_r) = ax
 
 	top_l.plot(range(len(height)), height, label='height')
@@ -57,9 +58,10 @@ def plot_heights(height, slope):
 	top_r.plot(range(n), height[:n], label='height')
 	bottom_r.plot(range(n), slope[:n], label='slope')
 
+	f.savefig(path.out('field.png'))
 
 
-_, axes = plt.subplots(1, 3, figsize=(19,4), constrained_layout=True)
+fig, axes = plt.subplots(1, 3, figsize=(19,4), constrained_layout=True)
 (ax_c, ax_d, ax_g) = axes
 
 
@@ -71,7 +73,7 @@ ax_c.plot(range(len(ac_in)), ac_in, label='ac_in')
 height = gen_height(ac_in)
 slope = np.diff(height.real)
 
-# plot_heights(height, slope)
+plot_heights(height, slope)
 
 
 # autocorrelation
@@ -118,4 +120,5 @@ ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith'
 
 print(flush=True)
 for a in axes: a.legend()
+fig.savefig(path.out('stat.png'))
 plt.show()
