@@ -43,7 +43,7 @@ def gen_height(ac):
 	# print('height')
 	# print(height[:100])
 
-	return height.real
+	return height.real/np.std(height.real)
 
 
 def plot_heights(height, slope):
@@ -88,7 +88,7 @@ ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
 
 # common distribution
 profile = dist.ggx
-alpha = 0.015
+alpha = 0.26
 angle = np.arctan(x)
 theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
 theo /= np.sum(theo) * (bins[1] - bins[0])
