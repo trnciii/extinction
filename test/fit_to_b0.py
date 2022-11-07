@@ -1,5 +1,5 @@
 import mfgeo, numpy as np
-from mfgeo.noise import oneoverf
+from mfgeo.noise import oneoverf, autoregressive
 from mfgeo import figurateur
 import time
 from matplotlib import pyplot as plt
@@ -9,11 +9,13 @@ import path
 n = 10000
 rngs = [np.random.default_rng(seed=mu) for mu in range(10000)]
 
+generator = autoregressive
+
 angle_steps = 100
 angle = np.linspace(1/angle_steps, np.pi/2, angle_steps)
 
 adjusted_alpha = 0.5
-sigma_ref = np.array([oneoverf.sequence(n, 0, rng) for rng in rngs])
+sigma_ref = np.array([generator.sequence(n, 0, rng) for rng in rngs])
 slope_base = 1/np.tan(angle)
 ref = np.array(mfgeo.g1_distant(sigma_ref, slope_base/adjusted_alpha))
 
@@ -21,7 +23,7 @@ ref = np.array(mfgeo.g1_distant(sigma_ref, slope_base/adjusted_alpha))
 for beta in np.linspace(-0.99, 0.99, 3):
 	print(f'b : {beta}')
 	t0 = time.time()
-	sigmas = np.array([oneoverf.sequence(n, beta, rng) for rng in rngs])
+	sigmas = np.array([generator.sequence(n, beta, rng) for rng in rngs])
 
 	def tested(a):
 		return mfgeo.g1_distant(sigmas, slope_base/a)
@@ -54,5 +56,5 @@ plt.plot(angle, ref, label=f'b={0:.2f} (ref). a = {adjusted_alpha:.2f}', linewid
 plt.legend()
 
 plt.tight_layout()
-plt.savefig(path.out('fit_to_b0.png'), dpi=200)
+plt.savefig(path.out(f'fit_to_b0_{generator.name}.png'), dpi=200)
 plt.show()
