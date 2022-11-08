@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from mfgeo import dist, acf, g1_distant
+from mfgeo import dist, acf, g1_distant, g1_distant_single
 from scipy.stats import norm
 import path
 
@@ -110,9 +110,9 @@ ax_d.plot(x, theo, label=f'{profile.name()} a={alpha}')
 n = 100
 angle = np.linspace(1/n, np.pi/2, n)
 
-window = len(height)//2
-_h = np.array([height[i:i+window] for i in range(0, window, window//1000)])
-G = g1_distant(_h, 1/np.tan(angle))
+half = len(height)//2
+starts = np.arange(0, half+1, min(10000, half))
+G = g1_distant_single(height, starts, 1/np.tan(angle))
 
 ax_g.plot(angle, G, label='tested')
 ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith')

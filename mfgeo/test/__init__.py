@@ -6,4 +6,4 @@ try:
 except ImportError:
 	gpu_found = False
 
-from .cpu import g1_distant
+from .cpu import g1_distant, g1_distant_single
