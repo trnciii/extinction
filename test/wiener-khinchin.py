@@ -47,6 +47,15 @@ def gen_height(ac):
 	return height.real/np.amax(height.real)
 
 
+def gen_height_slope_normalized(ac, alpha):
+	height = gen_height(ac)
+	slope = np.diff(height.real)
+
+	scale = alpha / (2**0.5 * np.std(slope))
+
+	return height*scale, slope*scale
+
+
 def plot_heights(height, slope):
 	f, ax = plt.subplots(2, 2, figsize=(20, 3), width_ratios=[4,1], constrained_layout=True)
 	(top_l, top_r), (bottom_l, bottom_r) = ax
@@ -70,8 +79,11 @@ ax_c.plot(range(len(ac_in)), ac_in, label='ac_in')
 
 
 # height and slope
-height = gen_height(ac_in)
-slope = np.diff(height.real)
+# height = gen_height(ac_in)
+# slope = np.diff(height.real)
+
+alpha = 0.5
+height, slope = gen_height_slope_normalized(ac_in, alpha)
 
 plot_heights(height, slope)
 
@@ -98,7 +110,6 @@ ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
 
 # compare D
 profile = dist.beckmann
-alpha = 0.52
 angle = np.arctan(x)
 theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
 theo /= np.sum(theo) * (bins[1] - bins[0])
