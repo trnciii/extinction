@@ -3,7 +3,7 @@ echo "root: $ROOT"
 echo "os: ${OSTYPE}"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-	alias install='python3 -m pip install -e $ROOT'
+	alias install='python3 setup.py develop --user'
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 	alias install='python3 setup.py develop --user'
 elif [[ "$OSTYPE" == "msys" ]]; then
