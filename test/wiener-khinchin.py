@@ -144,7 +144,7 @@ for e, alpha, t in itertools.product(
 	angle = np.linspace(1/n, np.pi/2, n)
 
 	half = len(height)//2
-	starts = np.arange(0, half+1, min(100000, half))
+	starts = np.arange(0, half+1, (half//1000_00) + 1)
 	G = g1_distant_single(height, starts, 1/np.tan(angle))
 
 	ax_g.plot(angle, G, label='tested')
