@@ -79,6 +79,7 @@ def plot_heights(height, slope, suffix):
 	bottom_r.plot(range(n), slope[:n], label='slope')
 
 	f.savefig(path.out(f'field_{suffix}.png'))
+	plt.close(f)
 
 
 # parameters
@@ -154,4 +155,4 @@ for e, alpha, t in itertools.product(
 	fig.savefig(path.out(f'stat_{suffix}.png'))
 	# plt.show()
 
-	plt.close()
+	plt.close(fig)
