@@ -49,10 +49,7 @@ def gen_height(ac, rng):
 	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
 
 	margin = int(len(ac)*0.2)
-	height = np.fft.ifft(amp*phase_sym)[margin:len(ac)-margin]
-
-	# print('height')
-	# print(height[:100])
+	height = np.fft.ifft(amp*phase_sym)[margin:len(ac)//2]
 
 	return height.real
 
