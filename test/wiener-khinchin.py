@@ -32,7 +32,7 @@ def input_ac(e, t):
 	}[t]()
 
 
-def gen_height(ac):
+def gen_height(ac, rng):
 	ac = np.concatenate((ac[:-1], np.flip(ac[1:])))
 
 	psd = np.fft.fft(ac)
@@ -44,7 +44,6 @@ def gen_height(ac):
 	amp = np.sqrt(psd.real)
 	freq = np.fft.fftfreq(len(ac))
 
-	rng = np.random.default_rng(seed=0)
 	n = len(amp)//2 + 1
 	phase = 2j*np.pi*rng.random(n)
 	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
@@ -55,11 +54,11 @@ def gen_height(ac):
 	# print('height')
 	# print(height[:100])
 
-	return height.real/np.amax(height.real)
+	return height.real
 
 
-def gen_height_slope_normalized(ac, alpha):
-	height = gen_height(ac)
+def gen_height_slope_normalized(ac, alpha, rng):
+	height = gen_height(ac, rng)
 	slope = np.diff(height.real)
 
 	scale = alpha / (2**0.5 * np.std(slope))
@@ -100,7 +99,8 @@ for e, alpha, t in itertools.product(
 
 
 	# height and slope
-	height, slope = gen_height_slope_normalized(ac_in, alpha)
+	rng = np.random.default_rng(seed=0)
+	height, slope = gen_height_slope_normalized(ac_in, alpha, rng)
 
 	# height = gen_height(ac_in)
 	# slope = np.diff(height.real)
