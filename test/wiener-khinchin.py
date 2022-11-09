@@ -16,10 +16,10 @@ def input_ac(e, t):
 		return ac
 
 	def onef():
-		return 1/np.power(1+lin, 1)
+		return 1/np.power(1+lin, 0.5)
 
 	def cos():
-		return np.cos(lin/10)*np.exp(-lin/10)
+		return np.cos(lin/2)*np.exp(-lin/10)
 
 	def exp():
 		return np.exp(-lin/10)
@@ -81,7 +81,11 @@ def plot_heights(height, slope, suffix):
 # parameters
 for e, alpha, t in itertools.product(
 	[18, 21, 22],
-	[0.1, 0.2, 0.5, 0.9],
+	# [18],
+
+	# [0.1, 0.5, 0.9],
+	[0.5],
+
 	['white', '1f', 'cos']
 ):
 	suffix = f'{e}_{str(alpha).replace("0.", "")}_{t}'
