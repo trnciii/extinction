@@ -68,13 +68,13 @@ def gen_height_slope_normalized(ac, alpha):
 
 
 def plot_heights(height, slope, suffix):
-	f, ax = plt.subplots(2, 2, figsize=(20, 3), width_ratios=[4,1], constrained_layout=True)
+	f, ax = plt.subplots(2, 2, figsize=(20, 3), constrained_layout=True)
 	(top_l, top_r), (bottom_l, bottom_r) = ax
 
 	top_l.plot(range(len(height)), height, label='height')
 	bottom_l.plot(range(len(slope)), slope, label='slope')
 
-	n = 100
+	n = 400
 	top_r.plot(range(n), height[:n], label='height')
 	bottom_r.plot(range(n), slope[:n], label='slope')
 
@@ -91,13 +91,12 @@ for e, alpha, t in itertools.product(
 	suffix = f'{e}_{str(alpha).replace("0.", "")}_{t}'
 
 	# figures
-	fig, axes = plt.subplots(1, 3, figsize=(19,4), constrained_layout=True)
-	(ax_c, ax_d, ax_g) = axes
+	fig, axes = plt.subplots(1, 4, figsize=(20,4), constrained_layout=True)
+	(ax_c, ax_ch, ax_d, ax_g) = axes
 
 
 	# autocorrelation
 	ac_in = input_ac(e, t)
-	ax_c.plot(range(len(ac_in)), ac_in, label='ac_in')
 
 
 	# height and slope
@@ -108,42 +107,47 @@ for e, alpha, t in itertools.product(
 
 	plot_heights(height, slope, suffix)
 
-
 	# autocorrelation
 	ac_r = acf(height)
-	ax_c.plot(range(len(ac_r)), ac_r/ac_r[0], label='ac_result')
+	ac_r /= ac_r[0]
+
+
+	# plot autocorrelations
+	ax_c.plot(range(len(ac_in)), ac_in, label='ac_in')
+	ax_c.plot(range(len(ac_r)), ac_r, label='ac_result')
+
+	_n = 200
+	ax_ch.plot(range(_n), ac_in[:_n], label='ac_in')
+	ax_ch.plot(range(_n), ac_r[:_n], label='ac_result')
 
 
 	# numerical distribution
 	hist, bins = np.histogram(slope, bins='auto', density=True)
 	x = bins[:-1]
 
-	ax_d.plot(x, hist, label='numerical')
-
-
-	# normal distribution
-	mean = np.mean(slope)
-	std = np.std(slope)
-	normal = norm.pdf(x, loc=mean, scale=std)
-
-	ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
-
-
-	# compare D
+	# common distribution
 	profile = dist.beckmann
 	angle = np.arctan(x)
 	theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
 	theo /= np.sum(theo) * (bins[1] - bins[0])
 
+	# # normal distribution
+	# mean = np.mean(slope)
+	# std = np.std(slope)
+	# normal = norm.pdf(x, loc=mean, scale=std)
+
+	# plot ndfs
+	ax_d.plot(x, hist, label='generated')
 	ax_d.plot(x, theo, label=f'{profile.name()} a={alpha}')
+	# ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
 
 
-	# compare G
+	# visibility
 	n = 100
 	angle = np.linspace(1/n, np.pi/2, n)
 
 	half = len(height)//2
-	starts = np.arange(0, half+1, min(10000, half))
+	starts = np.arange(0, half+1, min(100000, half))
 	G = g1_distant_single(height, starts, 1/np.tan(angle))
 
 	ax_g.plot(angle, G, label='tested')
