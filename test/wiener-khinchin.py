@@ -8,21 +8,21 @@ import itertools
 
 def input_ac(e, t):
 	length = 2**e
-	lin = np.linspace(0, 1000, length)
+	lin = np.linspace(0, length, length)
 
 	def white():
 		ac = np.zeros(length)
 		ac[0] = 1
 		return ac
 
-	def onef(b=0.5):
-		return 1/np.power(1+lin, 0.5)
+	def onef():
+		return 1/np.power(1+lin, 1)
 
 	def cos():
-		return np.cos(lin/10)*np.exp(-lin/100)
+		return np.cos(lin/10)*np.exp(-lin/10)
 
 	def exp():
-		return np.exp(-lin/100)
+		return np.exp(-lin/10)
 
 	return {
 		'white': white,
@@ -83,9 +83,9 @@ def plot_heights(height, slope, suffix):
 
 # parameters
 for e, alpha, t in itertools.product(
-	[23],
+	[18, 21, 22],
 	[0.1, 0.2, 0.5, 0.9],
-	['white', '1f', 'cos', 'exp']
+	['white', '1f', 'cos']
 ):
 	suffix = f'{e}_{str(alpha).replace("0.", "")}_{t}'
 
