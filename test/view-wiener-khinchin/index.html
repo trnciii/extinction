@@ -1,0 +1,71 @@
+<style>
+
+body{
+	margin: 0;
+}
+
+table{
+	border-collapse:collapse;
+}
+
+th{
+	padding:8px;
+	position: sticky;
+	top:0;
+	background: lightcoral;
+}
+
+td{
+	padding: 8px;
+	background: lavenderblush;
+}
+
+tr:nth-child(odd) td{
+	background: white;
+}
+
+img{
+	height: 150;
+}
+
+.height{
+	width: calc( 150px * 10 / 3 );
+	object-fit:cover;
+	object-position:100% 0%;
+}
+
+.stat{
+	width: calc( 150px * 15 / 4 );
+	object-fit: cover;
+	object-position: 100% 0%;
+}
+
+</style>
+
+<table>
+	<thead id=head></thead>
+	<tbody id=body></tbody>
+</table>
+
+<script src='index.js'></script>
+<script>
+const keys = ['type', 'length', 'alpha'];
+const images = ['height', 'stat'];
+const path = '../result/wiener-khinchin';
+
+document.getElementById('head').innerHTML = '<tr>'
+	+ '<th>ID</th>' + keys.map(k=>`<th>${k}</th>`).join('')
+	+ `<th>images</th>`
+	+ '</tr>';
+
+document.getElementById('body').innerHTML = Object.entries(table).map(
+	([k,v])=>'<tr>'
+		+ `<td><a href=${path}/${k}>${k}</a></td>`
+		+ keys.map((_k)=>`<td>${v[_k]}</td>`).join('')
+		+ '<td><div style="margin: 10px 4px; display: inline;">'
+		+ 	`<img class=height src=${path}/${k}/height.png></img>`
+		+ 	`<img class=stat src=${path}/${k}/stat.png></img>`
+		+ '</div></td>'
+		+ '</tr>'
+).join('')
+</script>
