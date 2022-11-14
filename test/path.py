@@ -1,8 +1,10 @@
 import os
 import __main__
+from datetime import datetime
 
 def out(file=''):
 	d, f = os.path.split(__main__.__file__)
-	p = os.path.join(d, 'result', f.replace('.py', ''))
+	now = str(datetime.now().timestamp()).replace('.','')
+	p = os.path.join(d, 'result', f.replace('.py', ''), now)
 	os.makedirs(p, exist_ok=True)
 	return os.path.join(p, file)

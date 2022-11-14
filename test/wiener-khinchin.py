@@ -4,6 +4,7 @@ from mfgeo import dist, acf, g1_distant, g1_distant_single
 from scipy.stats import norm
 import path
 import itertools
+import os, json, inspect
 
 
 def input_ac(e, t):
@@ -63,7 +64,7 @@ def gen_height_slope_normalized(ac, alpha, rng):
 	return height*scale, slope*scale
 
 
-def plot_heights(height, slope, suffix):
+def plot_heights(height, slope, file):
 	f, ax = plt.subplots(2, 2, figsize=(20, 3), constrained_layout=True)
 	(top_l, top_r), (bottom_l, bottom_r) = ax
 
@@ -74,7 +75,7 @@ def plot_heights(height, slope, suffix):
 	top_r.plot(range(n), height[:n], label='height')
 	bottom_r.plot(range(n), slope[:n], label='slope')
 
-	f.savefig(path.out(f'field_{suffix}.png'))
+	f.savefig(file)
 	plt.close(f)
 
 
@@ -88,7 +89,18 @@ for e, alpha, t in itertools.product(
 
 	['white', '1f', 'cos']
 ):
-	suffix = f'{e}_{str(alpha).replace("0.", "")}_{t}'
+	_o = path.out()
+	out = lambda file: os.path.join(_o, file)
+
+	meta = {
+		'length': e,
+		'alpha': alpha,
+		'type': t,
+	}
+
+	with open(out('meta.json'), 'w') as f:
+		f.write(json.dumps(meta, indent=2))
+
 
 	# figures
 	fig, axes = plt.subplots(1, 4, figsize=(20,4), constrained_layout=True)
@@ -98,6 +110,8 @@ for e, alpha, t in itertools.product(
 	# autocorrelation
 	ac_in = input_ac(e, t)
 
+	np.save(out('ac_input'), ac_in)
+
 
 	# height and slope
 	rng = np.random.default_rng(seed=0)
@@ -106,20 +120,24 @@ for e, alpha, t in itertools.product(
 	# height = gen_height(ac_in)
 	# slope = np.diff(height.real)
 
-	plot_heights(height, slope, suffix)
+	np.save(out('height'), height)
+	np.save(out('slope'), slope)
+	plot_heights(height, slope, file=out('height.png'))
 
 	# autocorrelation
 	ac_r = acf(height)
 	ac_r /= ac_r[0]
 
+	np.save(out('ac_generated'), ac_r)
+
 
 	# plot autocorrelations
-	ax_c.plot(range(len(ac_in)), ac_in, label='ac_in')
-	ax_c.plot(range(len(ac_r)), ac_r, label='ac_result')
+	ax_c.plot(range(len(ac_in)), ac_in, label='ac_input')
+	ax_c.plot(range(len(ac_r)), ac_r, label='ac_generated')
 
 	_n = 200
-	ax_ch.plot(range(_n), ac_in[:_n], label='ac_in')
-	ax_ch.plot(range(_n), ac_r[:_n], label='ac_result')
+	ax_ch.plot(range(_n), ac_in[:_n], label='ac_input')
+	ax_ch.plot(range(_n), ac_r[:_n], label='ac_generated')
 
 
 	# numerical distribution
@@ -151,13 +169,15 @@ for e, alpha, t in itertools.product(
 	starts = np.arange(0, half+1, (half//1000_00) + 1)
 	G = g1_distant_single(height, starts, 1/np.tan(angle))
 
+	np.save(out('visibility'), G)
+
 	ax_g.plot(angle, G, label='tested')
 	ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith')
 
 
-	print(f'done {suffix}', flush=True)
+	print(f'done {meta}', flush=True)
 	for a in axes: a.legend()
-	fig.savefig(path.out(f'stat_{suffix}.png'))
+	fig.savefig(out('stat.png'))
 	# plt.show()
 
 	plt.close(fig)
