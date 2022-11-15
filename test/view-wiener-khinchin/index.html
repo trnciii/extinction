@@ -30,17 +30,16 @@ tr:nth-child(odd) td{
 
 td img{
 	height: 150;
+	object-fit:cover;
 }
 
 td .height{
 	width: calc( 150px * 10 / 3 );
-	object-fit:cover;
 	object-position:100% 0%;
 }
 
 td .stat{
 	width: calc( 150px * 15 / 4 );
-	object-fit: cover;
 	object-position: 100% 0%;
 }
 
@@ -66,7 +65,7 @@ const path = '../result/wiener-khinchin';
 document.getElementById('head').innerHTML = '<tr>'
 	+ '<th>ID</th>'
 	+ keys.map(k=>`<th><div style='display:flex;flex-direction:column;'>${k}<select id=filter_${k} onchange='draw()'><./select></div></th>`).join('')
-	+ '<th>images&ensp;'
+	+ '<th style="text-align: left;">images&ensp;'
 	+ images.map(k=>`<lable><input id=${k} type=checkbox checked onchange='draw()'>${k}</label>`).join('')
 	+ '</th>'
 	+ '</tr>';
@@ -102,8 +101,8 @@ function draw(){
 		([k,v])=>'<tr>'
 			+ `<td><a href=${path}/${k}>${wrap(k)}</a></td>`
 			+ keys.map(_k=>`<td>${v[_k]}</td>`).join('')
-			+ '<td><div style="margin: 10px 4px; display: inline;">'
-			+ images.map(_k=>buttons[_k].checked? `<img class='${_k} img-responsive image' data-group="gallery-${_k}" src=${path}/${k}/${_k}.png></img>`:'').join('')
+			+ '<td><div style="margin: 10px 4px; display: inline; white-space: nowrap;">'
+			+ images.map(_k=>buttons[_k].checked? `<img class='${_k} image' data-group="${_k}" src=${path}/${k}/${_k}.png></img>`:'').join('&ensp;')
 			+ '</div></td>'
 			+ '</tr>'
 	).join('')

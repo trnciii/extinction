@@ -8,3 +8,7 @@ def out(file=''):
 	p = os.path.join(d, 'result', f.replace('.py', ''), now)
 	os.makedirs(p, exist_ok=True)
 	return os.path.join(p, file)
+
+def cur():
+	d, _ = os.path.split(__main__.__file__)
+	return d
