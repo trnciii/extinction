@@ -60,11 +60,18 @@ const path = '../result/wiener-khinchin';
 
 
 document.getElementById('head').innerHTML = '<tr>'
-	+ '<th>ID</th>' + keys.map(k=>`<th><div style='display:flex;flex-direction:column;'>${k}<select id=filter_${k} onchange='draw()'><./select></div></th>`).join('')
-	+ `<th>images</th>`
+	+ '<th>ID</th>'
+	+ keys.map(k=>`<th><div style='display:flex;flex-direction:column;'>${k}<select id=filter_${k} onchange='draw()'><./select></div></th>`).join('')
+	+ '<th>images&ensp;'
+	+ images.map(k=>`<lable><input id=${k} type=checkbox checked onchange='draw()'>${k}</label>`).join('')
+	+ '</th>'
 	+ '</tr>';
 
-filters = Object.fromEntries(keys.map(k=>[k, document.getElementById(`filter_${k}`)]));
+const filters = Object.fromEntries(keys.map(k=>[k, document.getElementById(`filter_${k}`)]));
+const buttons = {
+	'height': document.getElementById('height'),
+	'stat': document.getElementById('stat'),
+};
 
 Object.entries(filters).forEach(([k,v])=>{
 	v.innerHTML = `<option value=all>all</option>`
@@ -90,10 +97,9 @@ function draw(){
 	document.getElementById('body').innerHTML = _t.map(
 		([k,v])=>'<tr>'
 			+ `<td><a href=${path}/${k}>${wrap(k)}</a></td>`
-			+ keys.map((_k)=>`<td>${v[_k]}</td>`).join('')
+			+ keys.map(_k=>`<td>${v[_k]}</td>`).join('')
 			+ '<td><div style="margin: 10px 4px; display: inline;">'
-			+ 	`<img class=height src=${path}/${k}/height.png></img>`
-			+ 	`<img class=stat src=${path}/${k}/stat.png></img>`
+			+ images.map(_k=>buttons[_k].checked? `<img class=${_k} src=${path}/${k}/${_k}.png></img>`:'').join('')
 			+ '</div></td>'
 			+ '</tr>'
 	).join('')
