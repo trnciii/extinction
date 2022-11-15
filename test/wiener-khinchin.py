@@ -181,4 +181,4 @@ for e, alpha, t in itertools.product(
 	# plt.show()
 
 	plt.close(fig)
-	os.system(f'python3 {os.path.join(path.cur(), "view-wiener-khinchin", "index.py")}')
+	os.system(f'python3 {os.path.join(path.cur(), "wiener-khinchin", "index.py")}')

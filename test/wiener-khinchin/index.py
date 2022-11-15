@@ -1,7 +1,7 @@
 import os, json, __main__
 
 here, _ = os.path.split(__main__.__file__)
-result = os.path.join(here, '../result/wiener-khinchin')
+result = os.path.join(here, 'result')
 
 data = {}
 
