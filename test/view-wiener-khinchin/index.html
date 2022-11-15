@@ -1,7 +1,11 @@
 <style>
 
+html{
+	font-family: monospace;
+}
+
 body{
-	margin: 0;
+	margin:0;
 }
 
 table{
@@ -42,6 +46,7 @@ img{
 
 </style>
 
+
 <table>
 	<thead id=head></thead>
 	<tbody id=body></tbody>
@@ -53,19 +58,42 @@ const keys = ['type', 'length', 'alpha'];
 const images = ['height', 'stat'];
 const path = '../result/wiener-khinchin';
 
+
 document.getElementById('head').innerHTML = '<tr>'
-	+ '<th>ID</th>' + keys.map(k=>`<th>${k}</th>`).join('')
+	+ '<th>ID</th>' + keys.map(k=>`<th><div style='display:flex;flex-direction:column;'>${k}<select id=filter_${k} onchange='draw()'><./select></div></th>`).join('')
 	+ `<th>images</th>`
 	+ '</tr>';
 
-document.getElementById('body').innerHTML = Object.entries(table).map(
-	([k,v])=>'<tr>'
-		+ `<td><a href=${path}/${k}>${k}</a></td>`
-		+ keys.map((_k)=>`<td>${v[_k]}</td>`).join('')
-		+ '<td><div style="margin: 10px 4px; display: inline;">'
-		+ 	`<img class=height src=${path}/${k}/height.png></img>`
-		+ 	`<img class=stat src=${path}/${k}/stat.png></img>`
-		+ '</div></td>'
-		+ '</tr>'
-).join('')
+filters = Object.fromEntries(keys.map(k=>[k, document.getElementById(`filter_${k}`)]));
+
+Object.entries(filters).forEach(([k,v])=>{
+	v.innerHTML = `<option value=all>all</option>`
+		+ [...new Set(Object.values(table).map(_v=>_v[k]))].sort()
+			.map(x=>`<option value=${x}>${x}</option>`)
+			.join('');
+});
+
+
+function filter(entries, key){
+	const f = filters[key].value;
+	if (f == 'all') return entries;
+	else return entries.filter(([_k,_v])=>_v[key]==f);
+}
+
+function draw(){
+	const _t = keys.reduce(filter, Object.entries(table));
+
+	document.getElementById('body').innerHTML = _t.map(
+		([k,v])=>'<tr>'
+			+ `<td><a href=${path}/${k}>${k}</a></td>`
+			+ keys.map((_k)=>`<td>${v[_k]}</td>`).join('')
+			+ '<td><div style="margin: 10px 4px; display: inline;">'
+			+ 	`<img class=height src=${path}/${k}/height.png></img>`
+			+ 	`<img class=stat src=${path}/${k}/stat.png></img>`
+			+ '</div></td>'
+			+ '</tr>'
+	).join('')
+}
+
+draw();
 </script>
