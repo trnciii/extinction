@@ -28,17 +28,17 @@ tr:nth-child(odd) td{
 	background: white;
 }
 
-img{
+td img{
 	height: 150;
 }
 
-.height{
+td .height{
 	width: calc( 150px * 10 / 3 );
 	object-fit:cover;
 	object-position:100% 0%;
 }
 
-.stat{
+td .stat{
 	width: calc( 150px * 15 / 4 );
 	object-fit: cover;
 	object-position: 100% 0%;
@@ -52,6 +52,10 @@ img{
 	<tbody id=body></tbody>
 </table>
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/modaal@0.4.4/dist/js/modaal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modaal@0.4.4/dist/css/modaal.min.css">
 <script src='index.js'></script>
 <script>
 const keys = ['type', 'length', 'alpha'];
@@ -99,10 +103,15 @@ function draw(){
 			+ `<td><a href=${path}/${k}>${wrap(k)}</a></td>`
 			+ keys.map(_k=>`<td>${v[_k]}</td>`).join('')
 			+ '<td><div style="margin: 10px 4px; display: inline;">'
-			+ images.map(_k=>buttons[_k].checked? `<img class=${_k} src=${path}/${k}/${_k}.png></img>`:'').join('')
+			+ images.map(_k=>buttons[_k].checked? `<img class='${_k} img-responsive image' data-group="gallery-${_k}" src=${path}/${k}/${_k}.png></img>`:'').join('')
 			+ '</div></td>'
 			+ '</tr>'
 	).join('')
+
+  $('.image').modaal({
+    type: 'image',
+    hide_close: true,
+  })
 }
 
 draw();
