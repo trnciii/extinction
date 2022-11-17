@@ -43,6 +43,16 @@ td .stat{
 	object-position: 100% 0%;
 }
 
+button{
+	padding:0;
+	border: none;
+	background: burlywood;
+}
+
+button:active{
+	background: chocolate;
+}
+
 </style>
 
 
@@ -99,7 +109,12 @@ function draw(){
 
 	document.getElementById('body').innerHTML = _t.map(
 		([k,v])=>'<tr>'
-			+ `<td><a href=${path}/${k}>${wrap(k)}</a></td>`
+			+ '<td>'
+			+		`<a href=${path}/${k}>${wrap(k)}</a><br>`
+			+ 	'----<br>'
+			+ 	`<button onclick="navigator.clipboard.writeText(${k})
+">copy</button>`
+			+	'</td>'
 			+ keys.map(_k=>`<td>${v[_k]}</td>`).join('')
 			+ '<td><div style="margin: 10px 4px; display: inline; white-space: nowrap;">'
 			+ images.map(_k=>buttons[_k].checked? `<img class='${_k} image' data-group="${_k}" src=${path}/${k}/${_k}.png></img>`:'').join('&ensp;')
