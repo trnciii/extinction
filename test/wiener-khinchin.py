@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.fftpack as fft
 from matplotlib import pyplot as plt
 from mfgeo import dist, acf, g1_distant, g1_distant_single
 from scipy.stats import norm
@@ -9,10 +10,10 @@ import os, json, inspect
 
 def input_ac(e, t):
 	length = 2**e
-	lin = np.linspace(0, length, length)
+	lin = np.linspace(0, length, length, dtype=np.float32)
 
 	def white():
-		ac = np.zeros(length)
+		ac = np.zeros(length, dtype=np.float32)
 		ac[0] = 1
 		return ac
 
@@ -36,21 +37,20 @@ def input_ac(e, t):
 def gen_height(ac, rng):
 	ac = np.concatenate((ac[:-1], np.flip(ac[1:])))
 
-	psd = np.fft.fft(ac)
+	psd = fft.fft(ac)
 	# print('psd')
 	# print(psd[:50], '...', psd[-50:], sep='\n')
 	# assert np.allclose(psd.imag, 0)
 	# assert np.all(psd.real > 0)
 
 	amp = np.sqrt(psd.real)
-	freq = np.fft.fftfreq(len(ac))
 
 	n = len(amp)//2 + 1
-	phase = 2j*np.pi*rng.random(n)
+	phase = 2j*np.pi*rng.random(n, dtype=np.float32)
 	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
 
 	margin = int(len(ac)*0.2)
-	height = np.fft.ifft(amp*phase_sym)[margin:len(ac)//2]
+	height = fft.ifft(amp*phase_sym)[margin:len(ac)//2]
 
 	return height.real
 
