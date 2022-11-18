@@ -81,10 +81,8 @@ document.getElementById('head').innerHTML = '<tr>'
 	+ '</tr>';
 
 const filters = Object.fromEntries(keys.map(k=>[k, document.getElementById(`filter_${k}`)]));
-const buttons = {
-	'height': document.getElementById('height'),
-	'stat': document.getElementById('stat'),
-};
+const buttons = Object.fromEntries(images.map(k=>[k, document.getElementById(k)]));
+
 
 Object.entries(filters).forEach(([k,v])=>{
 	v.innerHTML = `<option value=all>all</option>`
@@ -112,8 +110,7 @@ function draw(){
 			+ '<td>'
 			+		`<a href=${path}/${k}>${wrap(k)}</a><br>`
 			+ 	'----<br>'
-			+ 	`<button onclick="navigator.clipboard.writeText(${k})
-">copy</button>`
+			+ 	`<button onclick="navigator.clipboard.writeText(${k})">copy</button>`
 			+	'</td>'
 			+ keys.map(_k=>`<td>${v[_k]}</td>`).join('')
 			+ '<td><div style="margin: 10px 4px; display: inline; white-space: nowrap;">'
