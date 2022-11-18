@@ -1,7 +1,7 @@
 import mfgeo, numpy as np
 from mfgeo.noise import oneoverf
 from mfgeo import figurateur
-from mfgeo.ggx import smith_g1
+from mfgeo.distributions.ggx import smith_g1
 import time
 from matplotlib import pyplot as plt
 
