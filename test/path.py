@@ -12,3 +12,7 @@ def out(file=''):
 def cur():
 	d, _ = os.path.split(__main__.__file__)
 	return d
+
+def code():
+	import inspect
+	return inspect.getsource(__main__)

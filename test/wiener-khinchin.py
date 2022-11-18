@@ -96,11 +96,8 @@ for e, alpha, t in itertools.product(
 		'length': e,
 		'alpha': alpha,
 		'type': t,
+		'code': path.code()
 	}
-
-	with open(out('meta.json'), 'w') as f:
-		f.write(json.dumps(meta, indent=2))
-
 
 	# figures
 	fig, axes = plt.subplots(1, 4, figsize=(20,4), constrained_layout=True)
@@ -117,6 +114,7 @@ for e, alpha, t in itertools.product(
 	rng = np.random.default_rng(seed=0)
 	height, slope = gen_height_slope_normalized(ac_in, alpha, rng)
 
+	meta['cov'] = str(np.cov(height[:-1], slope))
 	# height = gen_height(ac_in)
 	# slope = np.diff(height.real)
 
@@ -175,7 +173,10 @@ for e, alpha, t in itertools.product(
 	ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith')
 
 
-	print(f'done {meta}', flush=True)
+	with open(out('meta.json'), 'w') as f:
+		f.write(json.dumps(meta, indent=2))
+
+	print(f'done ( {e} {alpha} {t} )', flush=True)
 	for a in axes: a.legend()
 	fig.savefig(out('stat.png'))
 	# plt.show()
