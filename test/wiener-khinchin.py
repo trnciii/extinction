@@ -81,11 +81,10 @@ def plot_heights(height, slope, file):
 
 # parameters
 for e, alpha, t in itertools.product(
-	[18, 21, 22],
-	# [18],
+	[18],
 
-	# [0.1, 0.5, 0.9],
-	[0.5],
+	[0.1, 0.5, 0.9],
+	# [0.5],
 
 	['white', '1f', 'cos']
 ):
@@ -163,21 +162,45 @@ for e, alpha, t in itertools.product(
 	n = 100
 	angle = np.linspace(1/n, np.pi/2, n)
 
-	half = len(height)//2
-	starts = np.arange(0, half+1, (half//1000_00) + 1)
-	G = g1_distant_single(height, starts, 1/np.tan(angle))
+	ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith',
+		color='C0', zorder=1000)
 
-	np.save(out('visibility'), G)
+	meta['starts size'] = {}
 
-	ax_g.plot(angle, G, label='tested')
-	ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith')
+	step = 100
+	for i, mu in enumerate(np.linspace(-np.pi/2, np.pi/2, step, endpoint=False)):
+
+		theta = np.arctan(-slope[:len(height)//2])
+		starts = np.where((mu <= theta) & (theta < mu + np.pi/step))[0]
+
+		# if starts.shape[0] < 100:
+			# continue
+
+		meta['starts size'][mu] = starts.shape[0]
+		G = g1_distant_single(height, starts, 1/np.tan(angle))
+
+		np.save(out(f'visibility_{mu:.2f}'), G)
+
+		markers = {
+			3: 'red',
+			step//2: 'yellow',
+			step-4: 'green'
+		}
+
+		if i in markers.keys():
+			print(i, mu, starts.shape)
+
+		ax_g.plot(angle, G, label=f'tested_{mu:.2f}',
+			color = markers.get(i, 'gray'),
+			zorder = 1000 if i in markers.keys() else 0
+		)
 
 
 	with open(out('meta.json'), 'w') as f:
 		f.write(json.dumps(meta, indent=2))
 
 	print(f'done ( {e} {alpha} {t} )', flush=True)
-	for a in axes: a.legend()
+	# for a in axes: a.legend()
 	fig.savefig(out('stat.png'))
 	# plt.show()
 
