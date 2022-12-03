@@ -106,7 +106,7 @@ function wrap(s) {
 }
 
 function draw(){
-	const _t = keys.reduce(filter, Object.entries(table));
+	const _t = keys.reduce(filter, Object.entries(table)).sort().reverse();
 
 	document.getElementById('body').innerHTML = _t.map(
 		([k,v])=>'<tr>'
