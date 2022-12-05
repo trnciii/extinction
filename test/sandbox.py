@@ -1,36 +1,35 @@
 from mfgeo import noise, figurateur
 from mfgeo.distributions import ggx
 import numpy as np
+from scipy.stats import norm
 from matplotlib import pyplot as plt
 import os, path
 
 # outdir = path.out()
 
+f, ax = plt.subplots(2,1,figsize=(40,15))
+
 rng = np.random.default_rng(seed=10)
 
 alpha = 0.4
 
-size = 1000000
+size = 100000000
 u1 = rng.uniform(size=(size))
 
-# sampled = np.arctan(alpha * np.sqrt(u1) / np.sqrt(1 - u1))
-sampled = alpha*(2*u1 - 1)/(2*np.sqrt(-u1*u1 + u1))
+sampled = 0.37*(2*u1 - 1)/(2*np.sqrt(-u1*u1 + u1))
+theta = np.arctan(sampled)
 
-hist, bins = np.histogram(sampled, bins='auto', density=True)
-x = np.arctan(bins)
-# hist = hist / np.sum(np.diff(x)*hist)
-plt.plot(x[:-1], hist, label='sampled')
+ax[1].plot(range(sampled.shape[0]), np.cumsum(sampled))
 
-theta = np.linspace(-np.pi/2, np.pi/2, bins.shape[0]-1)
+hist, bins = np.histogram(theta, bins='auto', density=True)
+ax[0].plot(bins[:-1], hist, label='sampled')
+
+
+theta = np.linspace(-np.pi/2, np.pi/2, 200)
 D = ggx.ndf(theta, alpha)
-plt.plot(theta, D, label='analytical')
+ax[0].plot(theta, D/1.45, label='analytical')
 
-print(np.sum(D*(theta[1]-theta[0])))
-
-ratio = hist/D
-print(ratio)
-plt.plot(theta, ratio, label='ratio')
 
 print(flush=True)
-plt.legend()
+ax[0].legend()
 plt.show()
