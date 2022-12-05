@@ -1,0 +1,132 @@
+<style>
+
+html{
+	font-family: monospace;
+}
+
+body{
+	margin:0;
+}
+
+table{
+	border-collapse:collapse;
+}
+
+th{
+	padding:8px;
+	position: sticky;
+	top:0;
+	background: lightcoral;
+}
+
+td{
+	padding: 8px;
+	background: lavenderblush;
+	white-space: pre-line;
+}
+
+tr:nth-child(odd) td{
+	background: white;
+}
+
+td img{
+	height: 150;
+	object-fit:cover;
+}
+
+td .height{
+	width: calc( 150px * 10 / 3 );
+	object-position:100% 0%;
+}
+
+td .stat{
+	width: calc( 150px * 15 / 4 );
+	object-position: 100% 0%;
+}
+
+button{
+	padding:0;
+	border: none;
+	background: burlywood;
+}
+
+button:active{
+	background: chocolate;
+}
+
+</style>
+
+
+<table>
+	<thead id=head></thead>
+	<tbody id=body></tbody>
+</table>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/modaal@0.4.4/dist/js/modaal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modaal@0.4.4/dist/css/modaal.min.css">
+<script src='index.js'></script>
+<script>
+const keys = ['type', 'length', 'alpha', 'cov'];
+const images = ['height', 'stat'];
+const path = './result';
+
+
+document.getElementById('head').innerHTML = '<tr>'
+	+ '<th>ID</th>'
+	+ keys.map(k=>`<th><div style='display:flex;flex-direction:column;'>${k}<select id=filter_${k} onchange='draw()'><./select></div></th>`).join('')
+	+ '<th style="text-align: left;">images&ensp;'
+	+ images.map(k=>`<lable><input id=${k} type=checkbox checked onchange='draw()'>${k}</label>`).join('')
+	+ '</th>'
+	+ '</tr>';
+
+const filters = Object.fromEntries(keys.map(k=>[k, document.getElementById(`filter_${k}`)]));
+const buttons = Object.fromEntries(images.map(k=>[k, document.getElementById(k)]));
+
+
+Object.entries(filters).forEach(([k,v])=>{
+	v.innerHTML = `<option value=all>all</option>`
+		+ [...new Set(Object.values(table).map(_v=>_v[k]))].sort()
+			.map(x=>`<option value=${x}>${x}</option>`)
+			.join('');
+});
+
+filters['cov'].innerHTML = '<option value=all>all</option>';
+
+
+function filter(entries, key){
+	const f = filters[key].value;
+	if (f == 'all') return entries;
+	else return entries.filter(([_k,_v])=>_v[key]==f);
+}
+
+function wrap(s) {
+	return [s.slice(0,4), s.slice(4,8), s.slice(8,12), s.slice(12,16)].join('<br>');
+}
+
+function draw(){
+	const _t = keys.reduce(filter, Object.entries(table)).sort().reverse();
+
+	document.getElementById('body').innerHTML = _t.map(
+		([k,v])=>'<tr>'
+			+ '<td>'
+			+		`<a href=${path}/${k}>${wrap(k)}</a><br>`
+			+ 	'----<br>'
+			+ 	`<button onclick="navigator.clipboard.writeText(${k})">copy</button>`
+			+	'</td>'
+			+ keys.map(_k=>`<td>${v[_k]}</td>`).join('')
+			+ '<td><div style="margin: 10px 4px; display: inline; white-space: nowrap;">'
+			+ images.map(_k=>buttons[_k].checked? `<img class='${_k} image' data-group="${_k}" src=${path}/${k}/${_k}.png></img>`:'').join('&ensp;')
+			+ '</div></td>'
+			+ '</tr>'
+	).join('')
+
+  $('.image').modaal({
+    type: 'image',
+    hide_close: true,
+  })
+}
+
+draw();
+</script>
