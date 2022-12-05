@@ -6,38 +6,31 @@ import os, path
 
 # outdir = path.out()
 
-
-def sample_ggx_ndf(u, alpha):
-	assert u.ndim == 2
-	assert u.shape[1] == 2
-
-	phi = 2*np.pi * u[:,1]
-	a2 = alpha*alpha
-	r2 = a2 * u[:,0] / (1 + u[:,0]*(a2-1))
-	r = np.sqrt(r2)
-
-	ret = np.empty((u.shape[0], 3))
-	ret[:,0] = r*np.cos(phi)
-	ret[:,1] = r*np.sin(phi)
-	ret[:,2] = np.sqrt(1-r2)
-	return ret
-
-
 rng = np.random.default_rng(seed=10)
 
 alpha = 0.4
 
-size = 10000
-u2 = rng.uniform(size=(size, 2))
+size = 1000000
 u1 = rng.uniform(size=(size))
-sampled = np.arctan(alpha * np.sqrt(u1) / np.sqrt(1 - u1))
+
+# sampled = np.arctan(alpha * np.sqrt(u1) / np.sqrt(1 - u1))
+sampled = alpha*(2*u1 - 1)/(2*np.sqrt(-u1*u1 + u1))
+
 hist, bins = np.histogram(sampled, bins='auto', density=True)
-x = bins[1:]
-plt.plot(x, hist/np.cos(x))
-plt.plot(x, np.cumsum(hist) * np.diff(bins))
+x = np.arctan(bins)
+# hist = hist / np.sum(np.diff(x)*hist)
+plt.plot(x[:-1], hist, label='sampled')
 
-theta = np.linspace(0, np.pi/2, 100)
+theta = np.linspace(-np.pi/2, np.pi/2, bins.shape[0]-1)
 D = ggx.ndf(theta, alpha)
-plt.plot(theta, D)
+plt.plot(theta, D, label='analytical')
 
+print(np.sum(D*(theta[1]-theta[0])))
+
+ratio = hist/D
+print(ratio)
+plt.plot(theta, ratio, label='ratio')
+
+print(flush=True)
+plt.legend()
 plt.show()
