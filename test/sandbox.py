@@ -1,34 +1,43 @@
 from mfgeo import noise, figurateur
+from mfgeo.distributions import ggx
 import numpy as np
 from matplotlib import pyplot as plt
 import os, path
 
-outdir = path.out()
+# outdir = path.out()
 
 
-figs = {}
-generator = noise.oneoverf
-n_range = [10**e for e in range(3, 6)]
-figs[generator.name], axes = plt.subplots(len(n_range), 1, figsize=(20, 10), constrained_layout=True)
+def sample_ggx_ndf(u, alpha):
+	assert u.ndim == 2
+	assert u.shape[1] == 2
 
-for n, ax in zip(n_range, axes):
-	rngs = [np.random.default_rng(seed=mu) for mu in range(10)]
+	phi = 2*np.pi * u[:,1]
+	a2 = alpha*alpha
+	r2 = a2 * u[:,0] / (1 + u[:,0]*(a2-1))
+	r = np.sqrt(r2)
 
-	height = np.array([generator.sequence(n, 0.99, rng) for rng in rngs])
-	slope = np.diff(height)
+	ret = np.empty((u.shape[0], 3))
+	ret[:,0] = r*np.cos(phi)
+	ret[:,1] = r*np.sin(phi)
+	ret[:,2] = np.sqrt(1-r2)
+	return ret
 
-	target = height[:, :200]
 
+rng = np.random.default_rng(seed=10)
 
-	print(f'type={generator.name} {n=} min={np.amin(target)} max={np.amax(target)} std={np.std(target)}')
-	print(flush=True)
+alpha = 0.4
 
-	size = target.shape[1]
-	# size = 500
-	sliced = target[:, -size:]
-	figurateur.cloud(ax, np.linspace(1, size, size), sliced)
+size = 10000
+u2 = rng.uniform(size=(size, 2))
+u1 = rng.uniform(size=(size))
+sampled = np.arctan(alpha * np.sqrt(u1) / np.sqrt(1 - u1))
+hist, bins = np.histogram(sampled, bins='auto', density=True)
+x = bins[1:]
+plt.plot(x, hist/np.cos(x))
+plt.plot(x, np.cumsum(hist) * np.diff(bins))
 
-plt.savefig(os.path.join(outdir, f'{generator.name}.png'.replace('/', '-')))
+theta = np.linspace(0, np.pi/2, 100)
+D = ggx.ndf(theta, alpha)
+plt.plot(theta, D)
 
-figurateur.save(figs, out_dir=outdir)
-figurateur.show(figs)
+plt.show()
