@@ -43,7 +43,6 @@ def gen_height(ac, rng):
 	# assert np.all(psd.real > 0)
 
 	amp = np.sqrt(psd.real)
-	freq = np.fft.fftfreq(len(ac))
 
 	n = len(amp)//2 + 1
 	phase = 2j*np.pi*rng.random(n)
