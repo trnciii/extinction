@@ -45,11 +45,11 @@ def gen_height(ac, rng):
 	amp = np.sqrt(psd.real)
 
 	n = len(amp)//2 + 1
-	phase = 2j*np.pi*rng.random(n)
+	phase = 2*np.pi*rng.random(n)
 	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
 
 	margin = int(len(ac)*0.2)
-	height = np.fft.ifft(amp*np.exp(phase_sym))[margin:len(ac)//2]
+	height = np.fft.ifft(amp*np.exp(1j * phase_sym))[margin:len(ac)//2]
 
 	return height.real
 

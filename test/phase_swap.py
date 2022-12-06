@@ -44,7 +44,7 @@ def input_phase(n):
 	half = signal.shape[0]//2
 	half = 200
 
-	return np.exp(1j * np.pad(phase[:half], (0, n-half), 'symmetric'))
+	return np.pad(phase[:half], (0, n-half), 'symmetric')
 
 
 def gen_height(ac, rng):
@@ -64,7 +64,7 @@ def gen_height(ac, rng):
 	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
 
 	margin = int(len(ac)*0.2)
-	height = np.fft.ifft(amp*phase_sym)[margin:len(ac)//2]
+	height = np.fft.ifft(amp*np.exp(1j*phase_sym))[margin:len(ac)//2]
 
 	return height.real
 
