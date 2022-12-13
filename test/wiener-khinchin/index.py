@@ -1,4 +1,4 @@
-import os, json, __main__
+import os, json, __main__, sys, shutil
 
 here, _ = os.path.split(__main__.__file__)
 result = os.path.join(here, 'result')
@@ -14,7 +14,12 @@ for d in os.listdir(result):
 	except Exception as e:
 		error.append((d, e))
 
-if len(error)>0:
+
+if 'clean' in sys.argv:
+	for i, _ in error:
+		shutil.rmtree(os.path.join(result, i))
+
+elif len(error)>0:
 	print('Error')
 	for i, e in error:
 		print(i)
