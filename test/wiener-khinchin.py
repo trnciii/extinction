@@ -11,30 +11,25 @@ def input_ac(e, t):
 	length = 2**e
 	lin = np.linspace(0, length, length)
 
-	def white():
+	if t == 'white':
 		ac = np.zeros(length)
 		ac[0] = 1
 		return ac
 
-	def onef():
+	elif t == '1f':
 		return 1/np.power(1+lin, 0.5)
 
-	def cos():
+	elif t == 'cos':
 		return np.cos(lin/2)*np.exp(-lin/10)
 
-	def exp():
+	elif t == 'exp':
 		return np.exp(-lin/10)
 
-	def triangle():
+	elif t == 'triangle':
 		return np.maximum(1 - lin/100, 0)
 
-	return {
-		'white': white,
-		'1f': onef,
-		'cos': cos,
-		'exp': exp,
-		'triangle': triangle
-	}[t]()
+	else:
+		raise NotImplementedError
 
 
 def gen_height(ac, rng):
@@ -89,7 +84,7 @@ for e, alpha, t in itertools.product(
 	[0.1, 0.5, 0.9],
 	# [0.5],
 
-	['triangle']
+	['white', 'cos', 'exp', '1f', 'triangle']
 ):
 	_o = path.out()
 	out = lambda file: os.path.join(_o, file)
