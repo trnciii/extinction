@@ -14,11 +14,17 @@ for d in os.listdir(result):
 	except Exception as e:
 		error.append((d, e))
 
-if len(error)>0:
+
+if 'clean' in sys.argv:
+	for i, _ in error:
+		shutil.rmtree(os.path.join(result, i))
+
+elif len(error)>0:
 	print('Error')
 	for i, e in error:
 		print(i)
 		print(f'\t{e}')
+
 
 with open(os.path.join(here, 'index.js'), 'w') as f:
 	f.write(f'const table = {json.dumps(data, indent=2)};')
