@@ -16,7 +16,7 @@ def input_ac(e, t):
 		ac[0] = 1
 		return ac
 
-	elif t == '1f':
+	elif t == 'pow':
 		return 1/np.power(1+lin, 0.5)
 
 	elif t == 'cos':
@@ -84,7 +84,7 @@ for e, alpha, t in itertools.product(
 	[0.1, 0.5, 0.9],
 	# [0.5],
 
-	['white', 'cos', 'exp', '1f', 'triangle']
+	['white', 'cos', 'exp', 'pow', 'triangle']
 ):
 	_o = path.out()
 	out = lambda file: os.path.join(_o, file)
