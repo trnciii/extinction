@@ -45,10 +45,12 @@ def gen_height(ac, rng):
 
 	n = len(amp)//2 + 1
 	phase = 2*np.pi*rng.random(n)
-	phase_sym = np.concatenate((phase[:-1], np.conj(np.flip(phase[1:]))))
+	phase_sym = np.concatenate((phase[:-1], -np.flip(phase[1:])))
 
 	margin = int(len(ac)*0.2)
 	height = np.fft.ifft(amp*np.exp(1j * phase_sym))[margin:len(ac)//2]
+
+	print(f'{np.max(height.imag)}')
 
 	return height.real
 
