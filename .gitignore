@@ -6,3 +6,4 @@ _skbuild
 *.pyd
 venv
 *.js
+*.DS_Store
