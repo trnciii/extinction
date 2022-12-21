@@ -27,6 +27,8 @@ __device__ float g1_distant_single(
 	size_t length,
 	float ray_slope)
 {
+	if(starts_size == 0) return 1;
+
 	float visible = starts_size;
 	for(size_t m=0; m<starts_size; m++){
 		size_t start = starts[m];
