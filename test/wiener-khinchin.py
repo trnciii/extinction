@@ -168,32 +168,20 @@ for e, alpha, t in itertools.product(
 	meta['starts size'] = {}
 
 	step = 100
-	for i, mu in enumerate(np.linspace(-np.pi/2, np.pi/2, step, endpoint=False)):
+	G = np.ones((step, n))
+	for i in range(step):
+		mu = i/step * np.pi - np.pi
 
 		theta = np.arctan(-slope[:len(height)//2])
 		starts = np.where((mu <= theta) & (theta < mu + np.pi/step))[0]
 
-		# if starts.shape[0] < 100:
-			# continue
-
 		meta['starts size'][mu] = starts.shape[0]
-		G = g1_distant_single(height, starts, 1/np.tan(angle))
+		G[i,:] = g1_distant_single(height, starts, 1/np.tan(angle))
 
-		np.save(out(f'visibility_{mu:.2f}'), G)
+	np.save(out('visibility'), G)
 
-		markers = {
-			3: 'red',
-			step//2: 'yellow',
-			step-4: 'green'
-		}
-
-		if i in markers.keys():
-			print(i, mu, starts.shape)
-
-		ax_g.plot(angle, G, label=f'tested_{mu:.2f}',
-			color = markers.get(i, 'gray'),
-			zorder = 1000 if i in markers.keys() else 0
-		)
+	for g in G:
+		ax_g.plot(angle, g, color='gray', zorder=0)
 
 
 	with open(out('meta.json'), 'w') as f:
