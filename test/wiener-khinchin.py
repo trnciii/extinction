@@ -170,7 +170,7 @@ for e, alpha, t in itertools.product(
 	step = 100
 	G = np.ones((step, n))
 	for i in range(step):
-		mu = i/step * np.pi - np.pi
+		mu = i/step * np.pi - 0.5*np.pi
 
 		theta = np.arctan(-slope[:len(height)//2])
 		starts = np.where((mu <= theta) & (theta < mu + np.pi/step))[0]
