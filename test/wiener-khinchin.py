@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from mfgeo import dist, acf, g1_distant, g1_distant_single
-from scipy.stats import norm
+from scipy import stats
 import path
 import itertools
 import os, json, inspect
@@ -101,8 +101,8 @@ for e, alpha, t in itertools.product(
 		}
 
 		# figures
-		fig, axes = plt.subplots(1, 4, figsize=(20,4), constrained_layout=True)
-		(ax_c, ax_ch, ax_d, ax_g) = axes
+		fig, axes = plt.subplots(1, 5, figsize=(20,4), constrained_layout=True)
+		(ax_c, ax_ch, ax_d, ax_qq, ax_g) = axes
 
 
 		# autocorrelation
@@ -122,6 +122,8 @@ for e, alpha, t in itertools.product(
 		np.save(out('height'), height)
 		np.save(out('slope'), slope)
 		plot_heights(height, slope, file=out('height.png'))
+
+		stats.probplot(slope, plot=ax_qq)
 
 		# autocorrelation
 		ac_r = acf(height)
@@ -148,11 +150,6 @@ for e, alpha, t in itertools.product(
 		angle = np.arctan(x)
 		theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
 		theo /= np.sum(theo) * (bins[1] - bins[0])
-
-		# # normal distribution
-		# mean = np.mean(slope)
-		# std = np.std(slope)
-		# normal = norm.pdf(x, loc=mean, scale=std)
 
 		# plot ndfs
 		ax_d.plot(x, hist, label='generated')
