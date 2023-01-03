@@ -88,109 +88,118 @@ for e, alpha, t in itertools.product(
 
 	['white', 'cos', 'exp', 'pow', 'triangle']
 ):
-	_o = path.out()
-	out = lambda file: os.path.join(_o, file)
+	print()
+	try:
+		_o = path.out()
+		out = lambda file: os.path.join(_o, file)
 
-	meta = {
-		'length': e,
-		'alpha': alpha,
-		'type': t,
-		'code': path.code()
-	}
+		meta = {
+			'length': e,
+			'alpha': alpha,
+			'type': t,
+			'code': path.code()
+		}
 
-	# figures
-	fig, axes = plt.subplots(1, 4, figsize=(20,4), constrained_layout=True)
-	(ax_c, ax_ch, ax_d, ax_g) = axes
-
-
-	# autocorrelation
-	ac_in = input_ac(e, t)
-
-	np.save(out('ac_input'), ac_in)
+		# figures
+		fig, axes = plt.subplots(1, 4, figsize=(20,4), constrained_layout=True)
+		(ax_c, ax_ch, ax_d, ax_g) = axes
 
 
-	# height and slope
-	rng = np.random.default_rng(seed=0)
-	height, slope = gen_height_slope_normalized(ac_in, alpha, rng)
+		# autocorrelation
+		ac_in = input_ac(e, t)
 
-	meta['cov'] = str(np.cov(height[:-1], slope))
-	# height = gen_height(ac_in)
-	# slope = np.diff(height.real)
-
-	np.save(out('height'), height)
-	np.save(out('slope'), slope)
-	plot_heights(height, slope, file=out('height.png'))
-
-	# autocorrelation
-	ac_r = acf(height)
-	ac_r /= ac_r[0]
-
-	np.save(out('ac_generated'), ac_r)
+		np.save(out('ac_input'), ac_in)
 
 
-	# plot autocorrelations
-	ax_c.plot(range(len(ac_in)), ac_in, label='ac_input')
-	ax_c.plot(range(len(ac_r)), ac_r, label='ac_generated')
+		# height and slope
+		rng = np.random.default_rng(seed=0)
+		height, slope = gen_height_slope_normalized(ac_in, alpha, rng)
 
-	_n = 200
-	ax_ch.plot(range(_n), ac_in[:_n], label='ac_input')
-	ax_ch.plot(range(_n), ac_r[:_n], label='ac_generated')
+		meta['cov'] = str(np.cov(height[:-1], slope))
+		# height = gen_height(ac_in)
+		# slope = np.diff(height.real)
 
+		np.save(out('height'), height)
+		np.save(out('slope'), slope)
+		plot_heights(height, slope, file=out('height.png'))
 
-	# numerical distribution
-	hist, bins = np.histogram(slope, bins='auto', density=True)
-	x = bins[:-1]
+		# autocorrelation
+		ac_r = acf(height)
+		ac_r /= ac_r[0]
 
-	# common distribution
-	profile = dist.beckmann
-	angle = np.arctan(x)
-	theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
-	theo /= np.sum(theo) * (bins[1] - bins[0])
-
-	# # normal distribution
-	# mean = np.mean(slope)
-	# std = np.std(slope)
-	# normal = norm.pdf(x, loc=mean, scale=std)
-
-	# plot ndfs
-	ax_d.plot(x, hist, label='generated')
-	ax_d.plot(x, theo, label=f'{profile.name()} a={alpha}')
-	# ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
+		np.save(out('ac_generated'), ac_r)
 
 
-	# visibility
-	n = 100
-	angle = np.linspace(1/n, np.pi/2, n)
+		# plot autocorrelations
+		ax_c.plot(range(len(ac_in)), ac_in, label='ac_input')
+		ax_c.plot(range(len(ac_r)), ac_r, label='ac_generated')
 
-	ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith',
-		color='C0', zorder=1000)
-
-	meta['starts size'] = {}
-
-	step = 100
-	G = np.ones((step, n))
-	for i in range(step):
-		mu = i/step * np.pi - 0.5*np.pi
-
-		theta = np.arctan(-slope[:len(height)//2])
-		starts = np.where((mu <= theta) & (theta < mu + np.pi/step))[0]
-
-		meta['starts size'][mu] = starts.shape[0]
-		G[i,:] = g1_distant_single(height, starts, 1/np.tan(angle))
-
-	np.save(out('visibility'), G)
-
-	for g in G:
-		ax_g.plot(angle, g, color='gray', zorder=0)
+		_n = 200
+		ax_ch.plot(range(_n), ac_in[:_n], label='ac_input')
+		ax_ch.plot(range(_n), ac_r[:_n], label='ac_generated')
 
 
-	with open(out('meta.json'), 'w') as f:
-		f.write(json.dumps(meta, indent=2))
+		# numerical distribution
+		hist, bins = np.histogram(slope, bins='auto', density=True)
+		x = bins[:-1]
 
-	print(f'done ( {e} {alpha} {t} )', flush=True)
-	# for a in axes: a.legend()
-	fig.savefig(out('stat.png'))
-	# plt.show()
+		# common distribution
+		profile = dist.beckmann
+		angle = np.arctan(x)
+		theo = profile.ndf(angle, alpha) * np.power(np.cos(angle), 4)
+		theo /= np.sum(theo) * (bins[1] - bins[0])
 
-	plt.close(fig)
-	os.system(f'python3 {os.path.join(path.cur(), "wiener-khinchin", "index.py")}')
+		# # normal distribution
+		# mean = np.mean(slope)
+		# std = np.std(slope)
+		# normal = norm.pdf(x, loc=mean, scale=std)
+
+		# plot ndfs
+		ax_d.plot(x, hist, label='generated')
+		ax_d.plot(x, theo, label=f'{profile.name()} a={alpha}')
+		# ax_d.plot(x, normal, label=f'normal ({mean:.2f},{std:.2f})')
+
+
+		# visibility
+		n = 100
+		angle = np.linspace(1/n, np.pi/2, n)
+
+		ax_g.plot(angle, profile.smith_g1(angle, alpha), label=f'{profile.name()} smith',
+			color='C0', zorder=1000)
+
+		meta['starts size'] = {}
+
+		step = 100
+		G = np.ones((step, n))
+		for i in range(step):
+			mu = i/step * np.pi - 0.5*np.pi
+
+			theta = np.arctan(-slope[:len(height)//2])
+			starts = np.where((mu <= theta) & (theta < mu + np.pi/step))[0]
+
+			meta['starts size'][mu] = starts.shape[0]
+			G[i,:] = g1_distant_single(height, starts, 1/np.tan(angle))
+
+		np.save(out('visibility'), G)
+
+		for g in G:
+			ax_g.plot(angle, g, color='gray', zorder=0)
+
+
+		with open(out('meta.json'), 'w') as f:
+			f.write(json.dumps(meta, indent=2))
+
+		print(f'done ( {e} {alpha} {t} )', flush=True)
+		# for a in axes: a.legend()
+		fig.savefig(out('stat.png'))
+		# plt.show()
+
+		plt.close(fig)
+		os.system(f'python3 {os.path.join(path.cur(), "wiener-khinchin", "index.py")}')
+
+	except Exception as exception:
+		import traceback
+		print(f'Error at ( {e} {alpha} {t} )')
+		traceback.print_exception(exception)
+		os.system(f'python3 {os.path.join(path.cur(), "wiener-khinchin", "index.py")} clean')
+
