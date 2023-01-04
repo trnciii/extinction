@@ -36,6 +36,7 @@ def gen_height(ac, rng):
 	ac = np.concatenate((ac[:-1], np.flip(ac[1:])))
 
 	psd = np.fft.fft(ac)
+	np.save(out('psd'), psd.real)
 	# print('psd')
 	# print(psd[:50], '...', psd[-50:], sep='\n')
 	# assert np.allclose(psd.imag, 0)
