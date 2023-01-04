@@ -125,6 +125,7 @@ for e, alpha, t in itertools.product(
 		plot_heights(height, slope, file=out('height.png'))
 
 		stats.probplot(slope, plot=ax_qq)
+		print('shapiro', stats.kstest(slope, 'norm'))
 
 		# autocorrelation
 		ac_r = acf(height)
