@@ -7,9 +7,9 @@ import itertools
 import os, json, inspect
 
 
-def input_ac(e, t):
+def input_ac(e, t, memory):
 	length = 2**e
-	lin = np.linspace(0, length, length)
+	lin = np.linspace(0, length/memory, length)
 
 	if t == 'white':
 		ac = np.zeros(length)
@@ -81,13 +81,14 @@ def plot_heights(height, slope, file):
 
 
 # parameters
-for e, alpha, t in itertools.product(
+for e, alpha, t, mem in itertools.product(
 	[18],
 
 	[0.1, 0.5, 0.9],
 	# [0.5],
 
-	['white', 'cos', 'exp', 'pow', 'triangle']
+	['white', 'cos', 'exp', 'pow', 'triangle'],
+	[1, 100],
 ):
 	print()
 	try:
@@ -98,6 +99,7 @@ for e, alpha, t in itertools.product(
 			'length': e,
 			'alpha': alpha,
 			'type': t,
+			'memory': mem,
 			'code': path.code()
 		}
 
@@ -107,7 +109,7 @@ for e, alpha, t in itertools.product(
 
 
 		# autocorrelation
-		ac_in = input_ac(e, t)
+		ac_in = input_ac(e, t, mem)
 
 		np.save(out('ac_input'), ac_in)
 
@@ -188,7 +190,7 @@ for e, alpha, t in itertools.product(
 		with open(out('meta.json'), 'w') as f:
 			f.write(json.dumps(meta, indent=2))
 
-		print(f'done ( {e} {alpha} {t} )', flush=True)
+		print(f'done ( {e=} {alpha=} {t=} {mem=})', flush=True)
 		# for a in axes: a.legend()
 		fig.savefig(out('stat.png'))
 		# plt.show()

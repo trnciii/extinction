@@ -14,6 +14,7 @@ for i in os.listdir(sources):
 
 	alpha = meta['alpha']
 	_type = meta['type']
+	mem = meta['memory']
 
 	out = os.path.join(here, f'result/{alpha:.2f}_####_{_type}')
 
