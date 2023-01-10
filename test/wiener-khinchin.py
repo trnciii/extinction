@@ -96,6 +96,7 @@ for e, alpha, t, mem in itertools.product(
 		out = lambda file: os.path.join(_o, file)
 
 		meta = {
+			'id': os.path.split(_o.rstrip('/'))[1],
 			'length': e,
 			'alpha': alpha,
 			'type': t,
