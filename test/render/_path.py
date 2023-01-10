@@ -9,3 +9,6 @@ def sources():
 
 def from_meta(meta):
 	return os.path.join(here(), f'images/{meta["alpha"]:.2f}_{meta["type"]}_{meta["memory"]}')
+
+def from_spec(a, t, m):
+	return os.path.join(here(), f'images/{a:.2f}_{t}_{m}')
