@@ -21,3 +21,6 @@ for i in os.listdir(sources):
 
 	for f in range(4):
 		os.system(f'blender -b {blend} -o {out} -f {f} --visibility {d}')
+
+	with open(os.path.join(path.from_meta(meta), 'meta.json'), 'w') as f:
+		f.write(json.dumps(meta, indent=2))
