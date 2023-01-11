@@ -9,7 +9,7 @@ import os, json, inspect
 
 def input_ac(e, t, memory):
 	length = 2**e
-	lin = np.linspace(0, length/memory, length)
+	lin = np.linspace(0, 1/memory, length)
 
 	if t == 'white':
 		ac = np.zeros(length)
@@ -17,16 +17,16 @@ def input_ac(e, t, memory):
 		return ac
 
 	elif t == 'pow':
-		return 1/np.power(1+lin, 0.5)
+		return 1/np.power(1+lin*1000, 0.5)
 
 	elif t == 'cos':
-		return np.cos(lin/2)*np.exp(-lin/10)
+		return np.cos(lin*20000)*np.exp(-lin*1000)
 
 	elif t == 'exp':
-		return np.exp(-lin/10)
+		return np.exp(-lin*1000)
 
 	elif t == 'triangle':
-		return np.maximum(1 - lin/100, 0)
+		return np.maximum(1 - lin*200, 0)
 
 	else:
 		raise NotImplementedError
