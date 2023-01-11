@@ -1,4 +1,4 @@
-import os
+import os, json
 
 def here():
 	import __main__
@@ -12,3 +12,9 @@ def from_meta(meta):
 
 def from_spec(a, t, m):
 	return os.path.join(here(), f'images/{a:.2f}_{t}_{m}')
+
+def load_npy(a, t, m, filename):
+	import numpy as np
+	with open(os.path.join(from_spec(a, t, m), 'meta.json')) as f:
+		meta = json.load(f)
+	return np.load(os.path.join(sources(), meta['id'], filename))
