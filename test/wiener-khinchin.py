@@ -48,8 +48,9 @@ def gen_height(ac, rng):
 	phase = 2*np.pi*rng.random(n)
 	phase_sym = np.concatenate((phase[:-1], -np.flip(phase[1:])))
 
-	margin = int(len(ac)*0.2)
-	height = np.fft.ifft(amp*np.exp(1j * phase_sym))[margin:len(ac)//2]
+	height = np.fft.ifft(amp*np.exp(1j * phase_sym))
+	np.save('height_complex', height)
+
 
 	print(f'{np.max(height.imag)}')
 
