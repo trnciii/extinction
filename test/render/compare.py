@@ -7,10 +7,10 @@ import _path as path
 import json
 
 
-def load_acf(a, t, m):
+def load_npy(a, t, m, filename):
 	with open(os.path.join(path.from_spec(a, t, m), 'meta.json')) as f:
 		meta = json.load(f)
-	return np.load(os.path.join(path.sources(), meta['id'], 'ac_generated.npy'))
+	return np.load(os.path.join(path.sources(), meta['id'], filename))
 
 
 src_path = os.path.join(path.here(), 'images')
@@ -35,7 +35,7 @@ files = os.listdir(src_path)
 
 alphas = [0.1, 0.5, 0.9]
 frames = list(range(4))
-types = ['white', 'cos', 'exp', 'pow', 'triangle']
+types = ['white', 'exp', 'pow', 'triangle', 'cos']
 memories = [1, 100]
 
 width = len(types) * len(memories) - 1
@@ -67,23 +67,25 @@ for alpha, frame in itertools.product(alphas, frames):
 	axes[0][0].axis('off')
 
 	for i, (t, m) in enumerate(type_memories):
-		acf = load_acf(alpha, t, m)
-		n = m*150
+		f = load_npy(alpha, t, m, 'height.npy')
+
+		left = f.shape[0]//2 - 50
+		right = left + 100
+		low = np.min(f) - 0.5
+		high = np.max(f) + 0.5
 
 		for a in [axes[0][1+i], axes[1+i][0]]:
-			a.plot([0, n], [0, 0], color='black', linewidth=1)
-			a.plot(range(n), acf[:n])
+			a.plot(range(right-left), f[left:right])
 			a.text(
-				0.95, 0.95,
-				f'{rename_table.get(t,t)} ({memory_label[m]})',
+				0.05, 0.95,
+				f'{rename_table.get(t,t)} ({memory_label[m]})' if t!='white' else 'delta',
 				fontsize=16,
 				transform = a.transAxes,
-				horizontalalignment='right',
+				horizontalalignment='left',
 				verticalalignment='top'
 			)
 
-			# a.get_xaxis().set_visible(False)
-			# a.get_yaxis().set_visible(False)
+			a.yaxis.set_ticks([low, high])
 			a.axis('off')
 
 
