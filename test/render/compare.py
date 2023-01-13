@@ -36,20 +36,22 @@ files = os.listdir(src_path)
 
 alphas = [0.1, 0.5, 0.9]
 frames = list(range(4))
-types = ['white', 'exp', 'pow', 'triangle', 'cos']
+types = ['white', 'triangle', 'exp', 'cos']
 memories = [1, 100]
 
 width = len(types) * len(memories) - 1
+dimi = width+4, width+1
+dimf = dimi[1]*1.5, (dimi[0]-1)*1.5
 
 for alpha, frame in itertools.product(alphas, frames):
 	print(f'{alpha=}, {frame=}', flush=True)
 
-	fig, axes = plt.subplots(
-		width+1, width+1,
-		figsize=(15, 15),
-		constrained_layout=True
+	fig, axes = plt.subplots(*dimi, figsize=dimf, constrained_layout=True,
+		gridspec_kw={'height_ratios': [1]*(width+2) + [0.2]+[1]}
 	)
-	# plt.subplots_adjust(wspace=0.05, hspace=0.05)
+
+	for a in itertools.chain(*axes):
+		a.axis('off')
 
 
 	type_memories = [
@@ -68,9 +70,6 @@ for alpha, frame in itertools.product(alphas, frames):
 		i /= np.max(i)
 
 
-	axes[0][0].imshow(images[0], cmap='gray')
-	axes[0][0].axis('off')
-
 	for i, (t, m) in enumerate(type_memories):
 		f = load_npy(alpha, t, m, 'height.npy')
 
@@ -79,11 +78,11 @@ for alpha, frame in itertools.product(alphas, frames):
 		low = np.min(f[left:right]) - 15*alpha
 		high = np.max(f[left:right]) + 15*alpha
 
-		for a in [axes[0][1+i], axes[1+i][0]]:
+		for a in [axes[1][1+i], axes[2+i][0]]:
 			a.plot(range(right-left), f[left:right], linewidth=1)
 			a.text(
 				0.05, 0.95,
-				f'{rename_table.get(t,t)} ({memory_label[m]})' if t!='white' else 'delta',
+				f'{rename_table.get(t,t)}' + (f'({memory_label[m]})' if t!='white' else ''),
 				fontsize=12,
 				transform = a.transAxes,
 				horizontalalignment='left',
@@ -91,16 +90,34 @@ for alpha, frame in itertools.product(alphas, frames):
 			)
 
 			a.yaxis.set_ticks([low, high])
-			a.axis('off')
+
+	for a, i in zip(axes[0][1:], images):
+		a.imshow(i, cmap='gray')
 
 
-	for _a, base in zip(axes[1:], images):
+	a = axes[-1][0]
+	a.scatter(range(20), np.random.random(20), s=5)
+	a.text(0.05, 0.95, 'smith', fontsize=12, transform=a.transAxes, horizontalalignment='left', verticalalignment='top')
+	a.yaxis.set_ticks([-1, 2])
+	image_smith = np.array(Image.open(os.path.join(path.from_spec(alpha, 'smith', 1), f'frame_{frame}.png')).convert('F'))
+	image_smith /= np.max(image_smith)
+
+	for a in axes[-1]:
+		s = a.spines['top']
+		s.set_position('zero')
+		s.set_color('red')
+		s.set_linewidth(3)
+
+	for a in axes[-2]:
+		a.axhline(y=0.5, linewidth=4, color='grey')
+
+
+	for _a, base in list(zip(axes[2:-2], images)) + [(axes[-1], image_smith)]:
 		for a, i in zip(_a[1:], images):
-			a.axis('off')
 
 			if base is i: continue
 
 			diff = i - base
-			a.imshow(diff, norm=Normalize(vmin=-0.05, vmax=0.05), cmap='seismic')
+			a.imshow(diff, norm=Normalize(vmin=-0.05, vmax=0.05), cmap='twilight_shifted')
 
 	fig.savefig(f'compared/{alpha:3.2f}_{frame}.jpg')
