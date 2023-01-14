@@ -8,10 +8,10 @@ import _path as path
 import json
 
 
-def load_npy(a, t, m, filename):
-	with open(os.path.join(path.from_spec(a, t, m), 'meta.json')) as f:
-		meta = json.load(f)
-	return np.load(os.path.join(path.sources(), meta['id'], filename))
+def load_image(a, t, m, f):
+	return np.array(Image.open(
+			os.path.join(path.from_spec(a, t, m), f'frame_{f}.png')
+		).convert('F'))
 
 
 src_path = os.path.join(path.here(), 'images')
@@ -43,6 +43,10 @@ width = len(types) * len(memories) - 1
 dimi = width+4, width+1
 dimf = dimi[1]*1.5, (dimi[0]-1)*1.5
 
+r = 0.05
+norm_div = Normalize(vmin=-r, vmax=r)
+norm_pos = Normalize(vmin=0, vmax=r)
+
 for alpha, frame in itertools.product(alphas, frames):
 	print(f'{alpha=}, {frame=}', flush=True)
 
@@ -59,27 +63,28 @@ for alpha, frame in itertools.product(alphas, frames):
 		if not (t == 'white' and m == 100)
 	]
 
-	images = [
-		np.array(Image.open(
-			os.path.join(path.from_spec(alpha, t, m), f'frame_{frame}.png')
-		).convert('F'))
-		for t, m in type_memories
-	]
+	images = list(map(
+		lambda i:i/np.max(i),
+		(load_image(alpha, t,m,frame) for t, m in type_memories)
+	))
 
-	for i in images:
-		i /= np.max(i)
+	image_smith = load_image(alpha, 'smith', 1, frame)
+	image_smith /= np.max(image_smith)
 
 
 	for i, (t, m) in enumerate(type_memories):
-		f = load_npy(alpha, t, m, 'height.npy')
+		_f = path.load_npy(alpha, t, m, 'height.npy')
 
-		left = f.shape[0]//2 - 200
+		left = _f.shape[0]//2 - 200
 		right = left + 400
-		low = np.min(f[left:right]) - 15*alpha
-		high = np.max(f[left:right]) + 15*alpha
+
+		f = _f[left:right]
+
+		low = np.min(f) - 15*alpha
+		high = np.max(f) + 15*alpha
 
 		for a in [axes[1][1+i], axes[2+i][0]]:
-			a.plot(range(right-left), f[left:right], linewidth=1)
+			a.plot(range(right-left), f, linewidth=1)
 			a.text(
 				0.05, 0.95,
 				f'{rename_table.get(t,t)}' + (f'({memory_label[m]})' if t!='white' else ''),
@@ -91,33 +96,33 @@ for alpha, frame in itertools.product(alphas, frames):
 
 			a.yaxis.set_ticks([low, high])
 
-	for a, i in zip(axes[0][1:], images):
+	for a, i in zip(axes[0], itertools.chain([image_smith], images)):
 		a.imshow(i, cmap='gray')
+
+	a = axes[0][0]
+	a.text(
+		0.05, 0.05, '[smith]',
+		color='white',
+		fontsize=14,
+		transform=a.transAxes,
+		horizontalalignment='left',
+		verticalalignment='bottom'
+	)
 
 
 	a = axes[-1][0]
 	a.scatter(range(20), np.random.random(20), s=5)
 	a.text(0.05, 0.95, 'smith', fontsize=12, transform=a.transAxes, horizontalalignment='left', verticalalignment='top')
 	a.yaxis.set_ticks([-1, 2])
-	image_smith = np.array(Image.open(os.path.join(path.from_spec(alpha, 'smith', 1), f'frame_{frame}.png')).convert('F'))
-	image_smith /= np.max(image_smith)
 
-	for a in axes[-1]:
-		s = a.spines['top']
-		s.set_position('zero')
-		s.set_color('red')
-		s.set_linewidth(3)
 
 	for a in axes[-2]:
 		a.axhline(y=0.5, linewidth=4, color='grey')
 
 
-	for _a, base in list(zip(axes[2:-2], images)) + [(axes[-1], image_smith)]:
-		for a, i in zip(_a[1:], images):
-
-			if base is i: continue
-
-			diff = i - base
-			a.imshow(diff, norm=Normalize(vmin=-0.05, vmax=0.05), cmap='twilight_shifted')
+	for _a, base in itertools.chain(zip(axes[2:-2], images), [(axes[-1], image_smith)]):
+		for a, image in zip(_a[1:], images):
+			if base is image: continue
+			a.imshow(image - base, cmap='seismic', norm=norm_div)
 
 	fig.savefig(f'compared/{alpha:3.2f}_{frame}.jpg')
