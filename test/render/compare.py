@@ -48,7 +48,17 @@ norm_div = Normalize(vmin=-r, vmax=r)
 norm_pos = Normalize(vmin=0, vmax=r)
 
 for alpha, frame in itertools.product(alphas, frames):
-	print(f'{alpha=}, {frame=}', flush=True)
+	print(f'''
+\\begin{{figure}}
+    \\begin{{center}}
+      \\makebox[\\textwidth]{{\\includegraphics[width=0.85\\paperwidth]{{thesis/compared/{alpha:.2f}_{frame}.jpg}}}}
+    \\end{{center}}
+    \\caption{{
+        $\\alpha={alpha}$の結果。
+    }}
+    \\label{{fig:allresults:1:0}}
+\\end{{figure}}
+''')
 
 	fig, axes = plt.subplots(*dimi, figsize=dimf, constrained_layout=True,
 		gridspec_kw={'height_ratios': [1]*(width+2) + [0.2]+[1]}
