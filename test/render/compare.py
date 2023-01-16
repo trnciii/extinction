@@ -14,11 +14,6 @@ def load_image(a, t, m, f):
 		).convert('F'))
 
 
-src_path = os.path.join(path.here(), 'images')
-
-to_filepath = lambda a,f,t,m:os.path.join(src_path, f'{a:3.2f}_{t}_{m}/frame_{f}.png')
-
-
 rename_table = {
 	'white': 'delta',
 	'cos': 'wave',
@@ -31,8 +26,6 @@ memory_label = {
 	100: 'long'
 }
 
-
-files = os.listdir(src_path)
 
 alphas = [0.1, 0.5, 0.9]
 frames = list(range(4))
