@@ -106,8 +106,8 @@ for a, (t, m) in itertools.product(alphas[:1], type_memories):
 
 	ax_ndf.plot(x, theo, label=f'{beckmann.name()} a={a}', linewidth=1, color=colors['input'])
 	ax_ndf.text(
-		0.95, 0.95, f'p={meta["shapiro"][1]:.2f}',
-		fontsize=14,
+		0.99, 0.95, f'p={meta["shapiro"][1]:.4f}',
+		fontsize=13,
 		transform=ax_ndf.transAxes,
 		verticalalignment='top',
 		horizontalalignment='right'

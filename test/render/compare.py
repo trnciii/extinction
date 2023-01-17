@@ -29,7 +29,7 @@ memory_label = {
 
 alphas = [0.1, 0.5, 0.9]
 frames = list(range(4))
-types = ['white', 'triangle', 'exp', 'cos']
+types = ['white', 'exp', 'pow', 'triangle', 'cos']
 memories = [1, 100]
 
 width = len(types) * len(memories) - 1
