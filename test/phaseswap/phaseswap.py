@@ -73,4 +73,4 @@ for _a, tr, (r, _) in zip(axes, types, fourier):
 		plot_slope_dist(axs, np.diff(h.real))
 
 
-fig.savefig('swap.png')
+fig.savefig('result/swap.png')
