@@ -198,7 +198,6 @@ for e, alpha, t, mem in itertools.product(
 		fig.savefig(out('stat.png'))
 		# plt.show()
 
-		plt.close(fig)
 		os.system(f'python3 {os.path.join(path.cur(), "wiener-khinchin", "index.py")}')
 
 	except Exception as exception:
@@ -207,3 +206,5 @@ for e, alpha, t, mem in itertools.product(
 		traceback.print_exception(exception)
 		os.system(f'python3 {os.path.join(path.cur(), "wiener-khinchin", "index.py")} clean')
 
+	finally:
+		plt.close(fig)
