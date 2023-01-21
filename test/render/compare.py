@@ -49,7 +49,7 @@ for alpha, frame in itertools.product(alphas, frames):
     \\caption{{
         $\\alpha={alpha}$の結果。
     }}
-    \\label{{fig:allresults:1:0}}
+    \\label{{fig:rendered:{alpha}:{frame}}}
 \\end{{figure}}
 ''')
 
